@@ -16,5 +16,6 @@ public interface AppointmentSlotMapper {
     // Convert create DTO to entity (doctor will be set manually in service)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "doctor", ignore = true)
+    @Mapping(target = "booked", ignore = true)
     AppointmentSlot toEntity(SlotCreateDTO dto);
 }
