@@ -9,7 +9,7 @@ public class DoctorDTO {
     private String lastName;
     private String email;
 
-    private String specialty;
+    private String speciality;
     private String location;
     private String licenseNumber;
 }

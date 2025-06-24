@@ -11,7 +11,7 @@ public class AppointmentSlotDTO {
     private Long doctorId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private boolean isBooked;
+    private boolean booked;
     private String notes;
 
 }
