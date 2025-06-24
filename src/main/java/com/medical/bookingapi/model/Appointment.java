@@ -27,7 +27,7 @@ public class Appointment {
 
     @NotNull
     @ManyToOne(optional = false) //Many appointments for one doctor
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn(name = "doctor_id", nullable = false)   
     private Doctor doctor;
 
     @NotNull
