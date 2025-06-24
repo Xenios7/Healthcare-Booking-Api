@@ -32,7 +32,7 @@ public class AppointmentSlot {
     private LocalDateTime endTime;
 
     @Column(name = "is_booked", nullable = false)
-    private boolean isBooked = false;
+    private boolean booked = false;
 
     @Column(columnDefinition = "text")
     private String notes;
