@@ -1,5 +1,6 @@
 package com.medical.bookingapi.service;
 
+import com.medical.bookingapi.dto.AppointmentCreateDTO;
 import com.medical.bookingapi.dto.AppointmentDTO;
 import com.medical.bookingapi.model.AppointmentSlot;
 import com.medical.bookingapi.model.Doctor;
@@ -22,7 +23,7 @@ public interface AppointmentService {
 
     List<AppointmentDTO> findByDoctorAndStatus(Doctor doctor, String status);
 
-    AppointmentDTO bookAppointment(AppointmentDTO dto);
+    AppointmentDTO bookAppointment(AppointmentCreateDTO dto);
 
     AppointmentDTO updateStatus(Long appointmentId, String newStatus);
 }
