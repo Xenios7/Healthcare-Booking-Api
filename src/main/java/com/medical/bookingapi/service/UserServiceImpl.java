@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+
         return userMapper.toDto(user);
     }
 
