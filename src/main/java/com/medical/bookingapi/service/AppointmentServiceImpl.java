@@ -90,6 +90,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment appointment = appointmentMapper.toEntity(dto);
 
+        //Need to manually set this fields since they are foreign keys
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
                 .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
 

@@ -26,14 +26,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<UserResponseDTO> login(@RequestBody @Valid UserLoginDTO loginDTO){
-
         UserResponseDTO user = userService.getUserByEmail(loginDTO.getEmail());
 
         return ResponseEntity.ok(user);
 
     }
-
-
 
 
 }

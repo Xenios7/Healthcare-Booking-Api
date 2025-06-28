@@ -93,6 +93,7 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
             .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
 
+        //Foreign key, we need to set it manually
         slot.setDoctor(doctor);
         slot.setBooked(false);
 
@@ -121,10 +122,12 @@ public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
 
     @Override
     public void deleteSlot(Long id) {
-        
+        if (!appointmentSlotRepository.existsById(id)) {
+            throw new UsernameNotFoundException("Appointment slot not found");
+        }
         appointmentSlotRepository.deleteById(id);
-
     }
+
 
 
 }
