@@ -20,6 +20,14 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final DoctorMapper doctorMapper;
+    
+    @Override
+    public DoctorDTO findById(Long id) {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return doctorMapper.toDto(doctor);
+    }
+
 
     @Override
     public DoctorDTO findByEmail(String email) {
@@ -32,9 +40,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorDTO> findBySpecialty(String specialty) {
+    public List<DoctorDTO> findBySpeciality(String specialty) {
 
-        List<Doctor> doctors = doctorRepository.findBySpecialty(specialty);
+        List<Doctor> doctors = doctorRepository.findBySpeciality(specialty);
         if(doctors.isEmpty()){
             throw new UsernameNotFoundException("No doctors found");
         }

@@ -23,6 +23,13 @@ public class PatientServiceImpl implements PatientService {
     private final PatientMapper patientMapper;
 
     @Override
+    public PatientDTO getPatientById(Long id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
+        return patientMapper.toDto(patient);
+    }
+
+    @Override
     public Optional<PatientDTO> findByEmail(String email) {
 
         return patientRepository.findByEmail(email)
