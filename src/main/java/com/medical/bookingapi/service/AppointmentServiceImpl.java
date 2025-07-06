@@ -32,8 +32,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentMapper appointmentMapper;
 
     @Override
-    public List<AppointmentDTO> findByDoctor(Doctor doctor) {
-    
+    public List<AppointmentDTO> findByDoctorId(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+        
         List<Appointment> appointments = appointmentRepository.findByDoctor(doctor);
 
         return appointments.stream()
@@ -41,18 +43,24 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
-    public List<AppointmentDTO> findByPatient(Patient patient) {
+    public List<AppointmentDTO> findByPatientId(Long patientId) {
     
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
+
         List<Appointment> appointments = appointmentRepository.findByPatient(patient);
 
         return appointments.stream()
                 .map(appointmentMapper::toDto)
                 .collect(Collectors.toList());        
     }
-
+    
     @Override
-    public Optional<AppointmentDTO> findBySlot(AppointmentSlot slot) {
+    public Optional<AppointmentDTO> findBySlotId(Long slotId) {
+        AppointmentSlot slot = slotRepository.findById(slotId)
+            .orElseThrow(() -> new UsernameNotFoundException("Slot not found"));
 
         return appointmentRepository.findBySlot(slot)
                 .map(appointmentMapper::toDto);
@@ -76,8 +84,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentDTO> findByDoctorAndStatus(Doctor doctor, String status) {
-
+    public List<AppointmentDTO> findByDoctorAndStatus(Long doctorId, String status) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
         List<Appointment> appointments = appointmentRepository.findByDoctorAndStatus(doctor, status);
 
         return appointments.stream()

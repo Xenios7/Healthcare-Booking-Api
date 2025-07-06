@@ -3,25 +3,23 @@ package com.medical.bookingapi.service;
 import com.medical.bookingapi.dto.AppointmentCreateDTO;
 import com.medical.bookingapi.dto.AppointmentDTO;
 import com.medical.bookingapi.model.AppointmentSlot;
-import com.medical.bookingapi.model.Doctor;
-import com.medical.bookingapi.model.Patient;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentService {
 
-    List<AppointmentDTO> findByDoctor(Doctor doctor);
+    List<AppointmentDTO> findByDoctorId(Long doctorId);
 
-    List<AppointmentDTO> findByPatient(Patient patient);
+    List<AppointmentDTO> findByPatientId(Long patientId);
 
-    Optional<AppointmentDTO> findBySlot(AppointmentSlot slot);
+    Optional<AppointmentDTO> findBySlotId(Long slotId);
 
     boolean existsBySlot(AppointmentSlot slot);
 
     List<AppointmentDTO> findByStatus(String status);
 
-    List<AppointmentDTO> findByDoctorAndStatus(Doctor doctor, String status);
+    List<AppointmentDTO> findByDoctorAndStatus(Long doctorId, String status);
 
     AppointmentDTO bookAppointment(AppointmentCreateDTO dto);
 
