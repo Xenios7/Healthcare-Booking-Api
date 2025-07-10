@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.medical.bookingapi.dto.AppointmentSlotDTO;
@@ -16,6 +15,7 @@ import com.medical.bookingapi.model.Doctor;
 import com.medical.bookingapi.repository.AppointmentSlotRepository;
 import com.medical.bookingapi.repository.DoctorRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,8 +27,10 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
     private final DoctorRepository doctorRepository; 
 
     @Override
-    public List<AppointmentSlotDTO> findByDoctor(Doctor doctor) {
-   
+    public List<AppointmentSlotDTO> findByDoctorId(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
+
         List<AppointmentSlot> slots = appointmentSlotRepository.findByDoctor(doctor);        
 
         return slots.stream()
@@ -56,8 +58,10 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
     }
 
     @Override
-    public List<AppointmentSlotDTO> findByDoctorAndIsBookedFalse(Doctor doctor) {
-      
+    public List<AppointmentSlotDTO> findByDoctorAndIsBookedFalse(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
+
         List<AppointmentSlot> slots = appointmentSlotRepository.findByDoctorAndIsBookedFalse(doctor);        
 
         return slots.stream()
@@ -78,8 +82,10 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
     }
 
     @Override
-    public Optional<AppointmentSlotDTO> findFirstByDoctorAndIsBookedFalseOrderByStartTimeAsc(Doctor doctor) {
-        
+    public Optional<AppointmentSlotDTO> findFirstByDoctorAndIsBookedFalseOrderByStartTimeAsc(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
+
         return appointmentSlotRepository
                 .findFirstByDoctorAndIsBookedFalseOrderByStartTimeAsc(doctor)
                 .map(appointmentSlotMapper::toDto);
@@ -91,7 +97,7 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
         AppointmentSlot slot = appointmentSlotMapper.toEntity(dto);
 
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
 
         //Foreign key, we need to set it manually
         slot.setDoctor(doctor);
@@ -102,9 +108,15 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
     }
 @Override
 public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
-
     AppointmentSlot slot = appointmentSlotRepository.findById(id)
-            .orElseThrow(() -> new UsernameNotFoundException("Slot not found"));
+            .orElseThrow(() -> new EntityNotFoundException("Appointment slot not found with ID: " + id));
+
+    boolean wasBooked = slot.isBooked();
+    boolean wantsToUnbook = !dto.isBooked();
+
+    if (wasBooked && !wantsToUnbook) {
+        throw new IllegalStateException("Cannot update a booked slot.");
+    }
 
     slot.setStartTime(dto.getStartTime());
     slot.setEndTime(dto.getEndTime());
@@ -113,7 +125,7 @@ public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
 
     if (dto.getDoctorId() != null) {
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
         slot.setDoctor(doctor);
     }
 
@@ -123,7 +135,7 @@ public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
     @Override
     public void deleteSlot(Long id) {
         if (!appointmentSlotRepository.existsById(id)) {
-            throw new UsernameNotFoundException("Appointment slot not found");
+            throw new EntityNotFoundException("Appointment slot not found with ID: " + id);
         }
         appointmentSlotRepository.deleteById(id);
     }

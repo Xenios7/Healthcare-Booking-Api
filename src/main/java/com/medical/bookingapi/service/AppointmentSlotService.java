@@ -11,17 +11,16 @@ import com.medical.bookingapi.model.Doctor;
 public interface AppointmentSlotService {
     
 
-    List<AppointmentSlotDTO> findByDoctor(Doctor doctor);
+    List<AppointmentSlotDTO> findByDoctorId(Long doctorId);
 
     List<AppointmentSlotDTO> findByIsBookedFalse();
 
-    List<AppointmentSlotDTO> findByDoctorAndIsBookedFalse(Doctor doctor);
+    List<AppointmentSlotDTO> findByDoctorAndIsBookedFalse(Long doctorId);
 
     List<AppointmentSlotDTO> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 
-    // Find the next available slot for a doctor
-    Optional<AppointmentSlotDTO> findFirstByDoctorAndIsBookedFalseOrderByStartTimeAsc(Doctor doctor);
-    //Added..
+    Optional<AppointmentSlotDTO> findFirstByDoctorAndIsBookedFalseOrderByStartTimeAsc(Long doctorId);
+    
     AppointmentSlotDTO createSlot(SlotCreateDTO dto);
     
     AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto);
