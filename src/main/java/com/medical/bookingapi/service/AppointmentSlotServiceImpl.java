@@ -106,32 +106,32 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
         return appointmentSlotMapper.toDto(appointmentSlotRepository.save(slot));
 
     }
-@Override
-public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
-    AppointmentSlot slot = appointmentSlotRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Appointment slot not found with ID: " + id));
+    @Override
+    public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
+        AppointmentSlot slot = appointmentSlotRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment slot not found with ID: " + id));
 
-    boolean wasBooked = slot.isBooked();
-    boolean wantsToUnbook = !dto.isBooked();
+        boolean wasBooked = slot.isBooked();
+        boolean wantsToUnbook = !dto.isBooked();
 
-    if (wasBooked && !wantsToUnbook) {
-        throw new IllegalStateException("Cannot update a booked slot.");
+        if (wasBooked && !wantsToUnbook) {
+            throw new IllegalStateException("Cannot update a booked slot.");
+        }
+
+        // Set manually since they are foreign keys  
+        slot.setStartTime(dto.getStartTime());
+        slot.setEndTime(dto.getEndTime());
+        slot.setBooked(dto.isBooked());
+        slot.setNotes(dto.getNotes());
+
+        if (dto.getDoctorId() != null) {
+            Doctor doctor = doctorRepository.findById(dto.getDoctorId())
+                    .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
+            slot.setDoctor(doctor);
+        }
+
+        return appointmentSlotMapper.toDto(appointmentSlotRepository.save(slot));
     }
-
-    // Set manually since they are foreign keys  
-    slot.setStartTime(dto.getStartTime());
-    slot.setEndTime(dto.getEndTime());
-    slot.setBooked(dto.isBooked());
-    slot.setNotes(dto.getNotes());
-
-    if (dto.getDoctorId() != null) {
-        Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
-        slot.setDoctor(doctor);
-    }
-
-    return appointmentSlotMapper.toDto(appointmentSlotRepository.save(slot));
-}
 
     @Override
     public void deleteSlot(Long id) {
