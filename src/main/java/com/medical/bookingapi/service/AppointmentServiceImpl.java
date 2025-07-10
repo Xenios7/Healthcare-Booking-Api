@@ -17,6 +17,9 @@ import com.medical.bookingapi.model.Patient;
 import com.medical.bookingapi.repository.AppointmentRepository;
 import com.medical.bookingapi.repository.DoctorRepository;
 import com.medical.bookingapi.repository.PatientRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import com.medical.bookingapi.repository.AppointmentSlotRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -127,6 +130,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentMapper.toDto(appointmentRepository.save(appointment));
     }
     
-    
+    @Override
+    public void deleteAppointment(Long id) {
+        if (!appointmentRepository.existsById(id)) {
+            throw new EntityNotFoundException("Appointment not found with ID: " + id);
+        }
+        appointmentRepository.deleteById(id);
+    }
 
 }

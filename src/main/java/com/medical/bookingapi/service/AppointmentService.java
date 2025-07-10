@@ -24,4 +24,7 @@ public interface AppointmentService {
     AppointmentDTO bookAppointment(AppointmentCreateDTO dto);
 
     AppointmentDTO updateStatus(Long appointmentId, String newStatus);
+
+    void deleteAppointment(Long id);
+
 }
