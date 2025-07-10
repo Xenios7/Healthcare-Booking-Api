@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.medical.bookingapi.dto.AppointmentCreateDTO;
-import com.medical.bookingapi.dto.AppointmentDTO;
+
 import com.medical.bookingapi.dto.AppointmentSlotDTO;
 import com.medical.bookingapi.dto.SlotCreateDTO;
-import com.medical.bookingapi.model.AppointmentSlot;
-import com.medical.bookingapi.service.AppointmentService;
 import com.medical.bookingapi.service.AppointmentSlotService;
 
 import jakarta.validation.Valid;
@@ -87,7 +85,10 @@ public class AppointmentSlotController {
         return ResponseEntity.ok(slot);
     }
 
-    @DeleteMapping
-    public ResponseEntity<
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSlot(@PathVariable Long id){
+        appointmentSlotService.deleteSlot(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
