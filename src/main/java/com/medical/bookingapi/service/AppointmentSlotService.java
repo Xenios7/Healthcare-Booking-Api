@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.medical.bookingapi.dto.AppointmentSlotDTO;
 import com.medical.bookingapi.dto.SlotCreateDTO;
-import com.medical.bookingapi.model.Doctor;
 
 public interface AppointmentSlotService {
     

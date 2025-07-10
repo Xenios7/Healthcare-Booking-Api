@@ -118,6 +118,7 @@ public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
         throw new IllegalStateException("Cannot update a booked slot.");
     }
 
+    // Set manually since they are foreign keys  
     slot.setStartTime(dto.getStartTime());
     slot.setEndTime(dto.getEndTime());
     slot.setBooked(dto.isBooked());
