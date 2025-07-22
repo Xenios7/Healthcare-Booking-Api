@@ -55,6 +55,9 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientMapper.toEntity(dto);
         // Hash the password
         patient.setPassword_hash(passwordEncoder.encode(dto.getPassword()));
+        // Set the role
+        patient.setRole("PATIENT");
+
         return patientMapper.toDto(patientRepository.save(patient));
     }
 

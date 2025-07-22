@@ -16,12 +16,10 @@ import java.time.LocalDate;
  * Shares the same primary key as {@link User} because of
  * {@code @Inheritance(strategy = InheritanceType.JOINED)} on the parent.
  */
-@Getter @Setter @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = true)           // keeps id-based equality from User
-                                               //includes fields from the superclass (User) when generating equals() and hashCode().
+@Getter @Setter @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "patient")
-
 public class Patient extends User {
 
     @Past
@@ -31,11 +29,9 @@ public class Patient extends User {
     @Column(name = "blood_type")
     private String bloodType;
 
-    @Column(columnDefinition = "text") //Could be blank
+    @Column(columnDefinition = "text")
     private String allergies;
 
-    /** Social-insurance or GESY beneficiary number. */
     @Column(name = "insurance_id")
     private String insuranceId;
-
 }

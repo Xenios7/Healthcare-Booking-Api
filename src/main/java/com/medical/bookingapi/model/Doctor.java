@@ -6,7 +6,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true) // Includes `id` from User in equals/hashCode
 @Entity
 @Table(name = "doctor")

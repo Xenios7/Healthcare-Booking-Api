@@ -11,6 +11,7 @@ import com.medical.bookingapi.dto.DoctorRegistrationDTO;
 import com.medical.bookingapi.mapper.DoctorMapper;
 import com.medical.bookingapi.model.Doctor;
 import com.medical.bookingapi.repository.DoctorRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +21,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final DoctorMapper doctorMapper;
-    
+    private final PasswordEncoder passwordEncoder; 
+        
     @Override
     public DoctorDTO findById(Long id) {
         Doctor doctor = doctorRepository.findById(id)
@@ -53,8 +55,11 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorDTO createDoctor(DoctorRegistrationDTO dto) {
-
         Doctor doctor = doctorMapper.toEntity(dto);
+        // Hash the password
+        doctor.setPassword_hash(passwordEncoder.encode(dto.getPassword()));
+        // Set the role
+        doctor.setRole("DOCTOR");
         return doctorMapper.toDto(doctorRepository.save(doctor));
     }
 

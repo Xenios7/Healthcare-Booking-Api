@@ -21,6 +21,10 @@ public abstract class User {
     private Long id;
 
     @NotBlank
+    @Column(name = "role", nullable = false)
+    private String role;
+
+    @NotBlank
     @Column(name = "first_name")
     private String firstName;
 
