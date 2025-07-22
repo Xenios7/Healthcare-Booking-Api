@@ -15,6 +15,8 @@ public interface DoctorMapper {
     @Mapping(target = "createdAt", ignore = true) // Let the DB handle it
     @Mapping(target = "lastLogin", ignore = true) // Let the DB handle it
     @Mapping(target = "password_hash", ignore = true) // You will manually hash and set this in the service
+    @Mapping(target = "role", ignore = true) 
+
     Doctor toEntity(DoctorRegistrationDTO dto);
     
 }

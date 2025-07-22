@@ -15,7 +15,7 @@ public interface PatientMapper {
     @Mapping(target = "createdAt", ignore = true) //Don’t map these fields. Let the database handle them.
     @Mapping(target = "lastLogin", ignore = true) //Don’t map these fields. Let the database handle them.
     @Mapping(target = "password_hash", ignore = true) // don't want to map it directly from the DTO, the DTO has a plain password.
-
+    @Mapping(target = "role", ignore = true) 
     Patient toEntity(PatientRegistrationDTO dto);
 
 }

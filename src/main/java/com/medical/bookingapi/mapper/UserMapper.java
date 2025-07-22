@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(target = "name", expression = "java(user.getFirstName() + \" \" + user.getLastName())")
-    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "firstName", source = "firstName")
+    @Mapping(target = "lastName", source = "lastName")    @Mapping(target = "role", ignore = true)
     @Mapping(target = "token", ignore = true)
     UserResponseDTO toDto(User user);
 
