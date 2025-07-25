@@ -1,5 +1,6 @@
 package com.medical.bookingapi.service;
 
+import com.medical.bookingapi.security.JwtService;
 import com.medical.bookingapi.dto.RegisterRequestDTO;
 import com.medical.bookingapi.dto.UserLoginDTO;
 import com.medical.bookingapi.dto.UserResponseDTO;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final JwtService jwtService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -54,6 +56,7 @@ public class AuthService {
 
     public UserResponseDTO login(UserLoginDTO request) {
         try {
+            // 1. Authenticate the user
             org.springframework.security.core.Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                     request.getEmail(),
@@ -61,20 +64,26 @@ public class AuthService {
                 )
             );
 
+            // 2. Get user details
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             User user = userDetails.getUser();
 
+            // 3. Generate JWT token
+            String jwtToken = jwtService.generateToken(userDetails);
+
+            // 4. Return user info + token
             return new UserResponseDTO(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getRole(), null
+                user.getRole(),
+                jwtToken // Add token to the response
             );
 
         } catch (AuthenticationException e) {
-            throw new RuntimeException("Invalid credentials"); 
+            throw new RuntimeException("Invalid credentials");
         }
-    
     }
+
 }

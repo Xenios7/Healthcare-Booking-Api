@@ -42,7 +42,9 @@ public class SecurityConfig {
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            // Run JwtFilter before Spring’s built-in UsernamePasswordAuthenticationFilter      
 
         return http.build();
     }
 }
+

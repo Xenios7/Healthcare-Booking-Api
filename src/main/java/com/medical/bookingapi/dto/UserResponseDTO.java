@@ -12,5 +12,5 @@ public class UserResponseDTO {
     private String lastName;
     private String email;
     private String role;
-    private String token; // Optional, can be null for now
+    private String token; // JWT
 }

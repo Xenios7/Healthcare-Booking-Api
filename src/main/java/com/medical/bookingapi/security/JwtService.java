@@ -1,8 +1,8 @@
 package com.medical.bookingapi.security;
 
+import com.medical.bookingapi.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,19 @@ import java.util.Date;
 public class JwtService {
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
-    private static final String SECRET = "supersecretkeysupersecretkeysupersecretkey"; // min 256-bit
+    private static final String SECRET = "supersecretkeysupersecretkeysupersecretkey"; 
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateToken(String email) {
+    public String generateToken(UserDetails userDetails) {
+        CustomUserDetails customUser = (CustomUserDetails) userDetails;
+        User user = customUser.getUser(); 
+
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole()) // Add role as JWT claim
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -34,7 +38,7 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String extractedEmail = extractEmail(token);
-        return (extractedEmail.equals(userDetails) && !isTokenExpired(token));
+        return (extractedEmail.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {
@@ -50,8 +54,7 @@ public class JwtService {
                 .getBody();
     }
 
-    public String extractUsername(String jwt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'extractUsername'");
+    public String extractUsername(String token) {
+        return extractEmail(token); // Reuse logic
     }
 }
