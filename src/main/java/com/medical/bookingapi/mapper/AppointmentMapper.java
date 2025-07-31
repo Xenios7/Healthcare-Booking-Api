@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
-    
+
     @Mapping(source = "doctor.id", target = "doctorId")
     @Mapping(source = "doctor.firstName", target = "doctorName")
     @Mapping(source = "doctor.speciality", target = "doctorSpeciality")
