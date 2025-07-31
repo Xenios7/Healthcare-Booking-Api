@@ -158,6 +158,9 @@
                         </path>
                     </annotationProcessorPaths>
                     <release>${java.version}</release>
+                    <compilerArgs>
+                        <arg>-Amapstruct.verbose=true</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
