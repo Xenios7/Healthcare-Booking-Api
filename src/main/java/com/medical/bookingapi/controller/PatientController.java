@@ -36,7 +36,7 @@ public class PatientController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<PatientDTO> getPatientByEmail(@RequestParam("email") String email) { //Maps HTTP GET requests to /api/patients/email
+    public ResponseEntity<PatientDTO> getPatientByEmail(@RequestParam String email) { //Maps HTTP GET requests to /api/patients/email
         
         return patientService.findByEmail(email)
                 .map(ResponseEntity::ok) // If the Optional has a value, wrap it in ResponseEntity.ok(...) (200 OK with body)

@@ -26,7 +26,7 @@ public class DoctorController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<DoctorDTO> getDoctorByEmail(@RequestParam("email") String email){
+    public ResponseEntity<DoctorDTO> getDoctorByEmail(@RequestParam String email){
 
         DoctorDTO doctor = doctorService.findByEmail(email);
         return ResponseEntity.ok(doctor);
