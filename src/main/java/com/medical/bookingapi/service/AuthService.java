@@ -48,6 +48,8 @@ public class AuthService {
                 doctor.setEmail(request.getEmail());
                 doctor.setPassword_hash(passwordEncoder.encode(request.getPassword()));
                 doctor.setRole("DOCTOR");
+                doctor.setLocation(request.getLocation());
+                doctor.setSpeciality(request.getSpeciality());
                 yield doctor;
             }
             default -> throw new IllegalArgumentException("Invalid role: " + request.getRole());

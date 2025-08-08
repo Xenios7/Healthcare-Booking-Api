@@ -12,13 +12,13 @@ public interface AppointmentSlotRepository extends JpaRepository<AppointmentSlot
 
     List<AppointmentSlot> findByDoctor(Doctor doctor);
 
-    List<AppointmentSlot> findByIsBookedFalse();
+    List<AppointmentSlot> findByBookedFalse();
 
-    List<AppointmentSlot> findByDoctorAndIsBookedFalse(Doctor doctor);
+    List<AppointmentSlot> findByDoctorAndBookedFalse(Doctor doctor);
 
     // Find slots within a specific time range
     List<AppointmentSlot> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 
     // Find the next available slot for a doctor *sos*
-    Optional<AppointmentSlot> findFirstByDoctorAndIsBookedFalseOrderByStartTimeAsc(Doctor doctor);
+    Optional<AppointmentSlot> findFirstByDoctorAndBookedFalseOrderByStartTimeAsc(Doctor doctor);
 }

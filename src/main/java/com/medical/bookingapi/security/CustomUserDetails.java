@@ -20,10 +20,14 @@ public class CustomUserDetails implements UserDetails {
     // Convert user's role to GrantedAuthority
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+
     }
 
     @Override
+
+
+    
     public String getPassword() {
         return user.getPassword_hash(); // match your entity field
     }

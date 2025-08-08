@@ -41,7 +41,7 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
     @Override
     public List<AppointmentSlotDTO> findByIsBookedFalse() {
       
-        List<AppointmentSlot> slots = appointmentSlotRepository.findByIsBookedFalse();        
+        List<AppointmentSlot> slots = appointmentSlotRepository.findByBookedFalse();        
 
         return slots.stream()
                 .map(appointmentSlotMapper::toDto)
@@ -62,7 +62,7 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
 
-        List<AppointmentSlot> slots = appointmentSlotRepository.findByDoctorAndIsBookedFalse(doctor);        
+        List<AppointmentSlot> slots = appointmentSlotRepository.findByDoctorAndBookedFalse(doctor);        
 
         return slots.stream()
                 .map(appointmentSlotMapper::toDto)
@@ -87,7 +87,7 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
                 .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
 
         return appointmentSlotRepository
-                .findFirstByDoctorAndIsBookedFalseOrderByStartTimeAsc(doctor)
+                .findFirstByDoctorAndBookedFalseOrderByStartTimeAsc(doctor)
                 .map(appointmentSlotMapper::toDto);
     }
 

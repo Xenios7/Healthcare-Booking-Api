@@ -9,4 +9,8 @@ public class RegisterRequestDTO {
     private String email;
     private String password;
     private String role; // "DOCTOR", "PATIENT", "ADMIN"
+    
+    // Only required for doctors
+    private String location;
+    private String speciality;
 }
