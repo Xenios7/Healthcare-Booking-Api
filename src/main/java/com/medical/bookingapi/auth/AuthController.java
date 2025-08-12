@@ -1,9 +1,8 @@
-package com.medical.bookingapi.controller;
+package com.medical.bookingapi.auth;
 
 import com.medical.bookingapi.dto.RegisterRequestDTO;
 import com.medical.bookingapi.dto.UserLoginDTO;
 import com.medical.bookingapi.dto.UserResponseDTO;
-import com.medical.bookingapi.service.AuthService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +19,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterRequestDTO request){
         
-        authService.register(request);
-        return ResponseEntity.ok("User registered successfully.");
+        authService.registerPatient(request);
+        return ResponseEntity.status(201).body("Patient registered successfully.");
 
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> login(@RequestBody UserLoginDTO login){
+    public ResponseEntity<UserResponseDTO> login(@RequestBody @Valid UserLoginDTO login){
 
         UserResponseDTO response = authService.login(login);
         return ResponseEntity.ok(response);

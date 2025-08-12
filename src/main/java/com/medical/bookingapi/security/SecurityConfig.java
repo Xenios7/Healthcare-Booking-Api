@@ -1,6 +1,5 @@
-package com.medical.bookingapi.config;
+package com.medical.bookingapi.security;
 
-import com.medical.bookingapi.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,17 +33,23 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                // Public auth endpoints
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
-                .requestMatchers("/api/patient/**").hasRole("PATIENT")
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                // Admin-only provisioning endpoints
+                .requestMatchers("/api/admins/**").hasRole("ADMIN")  // <-- lock ALL verbs
+
+                // Examples of role/ownership protected areas
+                .requestMatchers("/api/doctors/**").hasRole("DOCTOR")
+                .requestMatchers("/api/patients/**").authenticated()
+
                 .anyRequest().authenticated()
             )
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-            // Run JwtFilter before Spring’s built-in UsernamePasswordAuthenticationFilter      
 
         return http.build();
     }
+
 }
 
