@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 import com.medical.bookingapi.dto.PatientDTO;
+import com.medical.bookingapi.dto.PatientProfileUpdateDTO;
 import com.medical.bookingapi.dto.PatientRegistrationDTO;
 
 public interface PatientService {
@@ -13,9 +14,10 @@ public interface PatientService {
     List<PatientDTO> findByBloodType(String bloodType);
 
     PatientDTO createPatient(PatientRegistrationDTO dto);
-    PatientDTO updatePatient(Long id, PatientDTO dto);
+    // PatientDTO updatePatient(Long id, PatientDTO dto);
     PatientDTO getPatientById(Long id);
 
-    void deletePatient(Long id);
-    
+    // void deletePatient(Long id);
+    PatientDTO updateMyProfile(PatientProfileUpdateDTO dto);
+    PatientDTO me();
 }

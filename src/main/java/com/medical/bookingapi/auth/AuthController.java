@@ -32,11 +32,4 @@ public class AuthController {
 
     }
 
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleError(Exception ex) {
-        return ResponseEntity.status(500).body("Something went wrong: " + ex.getMessage());
-    }
-
-
 }

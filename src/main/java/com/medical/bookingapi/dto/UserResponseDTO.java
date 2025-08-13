@@ -2,9 +2,8 @@ package com.medical.bookingapi.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@AllArgsConstructor
 @NoArgsConstructor
-
+@AllArgsConstructor
 @Data
 public class UserResponseDTO {
     private Long id;

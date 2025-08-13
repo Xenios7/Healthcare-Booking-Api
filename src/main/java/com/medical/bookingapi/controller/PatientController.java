@@ -3,7 +3,6 @@ package com.medical.bookingapi.controller;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.bookingapi.dto.PatientDTO;
+import com.medical.bookingapi.dto.PatientProfileUpdateDTO;
 import com.medical.bookingapi.dto.PatientRegistrationDTO;
 import com.medical.bookingapi.service.PatientService;
 
@@ -58,23 +58,15 @@ public class PatientController {
 
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, @RequestBody @Valid PatientDTO dto){
-
-        PatientDTO patient = patientService.updatePatient(id, dto);
-        return ResponseEntity.ok(patient);
-
+    @GetMapping("/me")
+    public ResponseEntity<PatientDTO> me(){
+        return ResponseEntity.ok(patientService.me());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePatient(@PathVariable Long id){
-
-        patientService.deletePatient(id);
-        return ResponseEntity.noContent().build(); // 204 No Content
-
+    @PutMapping("/me")
+    public ResponseEntity<PatientDTO> updateMe(@Valid @RequestBody PatientProfileUpdateDTO dto) {
+        return ResponseEntity.ok(patientService.updateMyProfile(dto));
     }
-
-
 
     
 }   

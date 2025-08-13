@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.medical.bookingapi.dto.PatientDTO;
+import com.medical.bookingapi.dto.PatientProfileUpdateDTO;
 import com.medical.bookingapi.dto.PatientRegistrationDTO;
 import com.medical.bookingapi.mapper.PatientMapper;
 import com.medical.bookingapi.model.Patient;
@@ -61,27 +63,48 @@ public class PatientServiceImpl implements PatientService {
         return patientMapper.toDto(patientRepository.save(patient));
     }
 
-    @Override
-    public PatientDTO updatePatient(Long id, PatientDTO dto) {
+    public PatientDTO me() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Patient me = patientRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+        return patientMapper.toDto(me);
+    }    
 
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
+    public PatientDTO updateMyProfile(PatientProfileUpdateDTO dto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Patient me = patientRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
 
-        patient.setAllergies(dto.getAllergies());
-        patient.setBloodType(dto.getBloodType());
-        patient.setDateOfBirth(dto.getDateOfBirth());
-        patient.setInsuranceId(dto.getInsuranceId());
+        me.setDateOfBirth(dto.getDateOfBirth());
+        me.setBloodType(dto.getBloodType());
+        me.setAllergies(dto.getAllergies());
+        me.setInsuranceId(dto.getInsuranceId());
 
-        return patientMapper.toDto(patientRepository.save(patient));
+        Patient saved = patientRepository.save(me);
+        return patientMapper.toDto(saved);
     }
 
-    @Override
-    public void deletePatient(Long id) {
-        if (!patientRepository.existsById(id)) {
-            throw new UsernameNotFoundException("Patient not found");
-        }
-        patientRepository.deleteById(id);
-    }
+    // @Override
+    // public PatientDTO updatePatient(Long id, PatientDTO dto) {
+
+    //     Patient patient = patientRepository.findById(id)
+    //             .orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
+
+    //     patient.setAllergies(dto.getAllergies());
+    //     patient.setBloodType(dto.getBloodType());
+    //     patient.setDateOfBirth(dto.getDateOfBirth());
+    //     patient.setInsuranceId(dto.getInsuranceId());
+
+    //     return patientMapper.toDto(patientRepository.save(patient));
+    // }
+
+    // @Override
+    // public void deletePatient(Long id) {
+    //     if (!patientRepository.existsById(id)) {
+    //         throw new UsernameNotFoundException("Patient not found");
+    //     }
+    //     patientRepository.deleteById(id);
+    // }
 
     
 }

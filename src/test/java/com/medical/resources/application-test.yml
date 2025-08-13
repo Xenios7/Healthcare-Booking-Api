@@ -1,0 +1,7 @@
+server:
+  port: 0
+spring:
+  main:
+    banner-mode: "off"
+  jpa:
+    show-sql: false

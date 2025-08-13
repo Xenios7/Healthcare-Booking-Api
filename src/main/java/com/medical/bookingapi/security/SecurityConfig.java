@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
 
                 // Admin-only provisioning endpoints
-                .requestMatchers("/api/admins/**").hasRole("ADMIN")  // <-- lock ALL verbs
+                .requestMatchers("/api/admins/**").hasRole("ADMIN")  
 
                 // Examples of role/ownership protected areas
                 .requestMatchers("/api/doctors/**").hasRole("DOCTOR")

@@ -3,10 +3,12 @@ package com.medical.bookingapi.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.medical.bookingapi.dto.DoctorDTO;
+import com.medical.bookingapi.dto.DoctorProfileUpdateDTO;
 import com.medical.bookingapi.dto.DoctorRegistrationDTO;
 import com.medical.bookingapi.mapper.DoctorMapper;
 import com.medical.bookingapi.model.Doctor;
@@ -63,31 +65,26 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorMapper.toDto(doctorRepository.save(doctor));
     }
 
-    @Override
-    public DoctorDTO updateDoctor(Long id, DoctorDTO dto) {
-
-        Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
-
-        // We update the fields manually
-        doctor.setFirstName(dto.getFirstName());
-        doctor.setLastName(dto.getLastName());
-        doctor.setSpeciality(dto.getSpeciality());
-        doctor.setEmail(dto.getEmail());
-
-        return doctorMapper.toDto(doctorRepository.save(doctor));
+    public DoctorDTO me() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Doctor me = doctorRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+        return doctorMapper.toDto(me);
     }
 
-    @Override
-    public void deleteDoctor(Long id) {
+    public DoctorDTO updateMyProfile(DoctorProfileUpdateDTO dto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Doctor me = doctorRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
 
-        if(!doctorRepository.existsById(id)){
-            throw new UsernameNotFoundException("Doctor not found");
-        }
+        me.setFirstName(dto.getFirstName());
+        me.setLastName(dto.getLastName());
+        me.setSpeciality(dto.getSpeciality());
+        me.setLocation(dto.getLocation());
+        me.setLicenseNumber(dto.getLicenseNumber());
 
-        doctorRepository.deleteById(id);
+        return doctorMapper.toDto(doctorRepository.save(me));
     }
+
     
-
-
 }

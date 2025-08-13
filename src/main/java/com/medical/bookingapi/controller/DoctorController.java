@@ -1,6 +1,7 @@
 package com.medical.bookingapi.controller;
 
 import com.medical.bookingapi.dto.DoctorDTO;
+import com.medical.bookingapi.dto.DoctorProfileUpdateDTO;
 import com.medical.bookingapi.dto.DoctorRegistrationDTO;
 import com.medical.bookingapi.service.DoctorService;
 
@@ -48,20 +49,14 @@ public class DoctorController {
         return ResponseEntity.ok(doctor);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DoctorDTO> updateDoctor(@PathVariable Long id, @RequestBody @Valid DoctorDTO dto){
-
-        DoctorDTO doctor = doctorService.updateDoctor(id, dto);
-        return ResponseEntity.ok(doctor);
+    @GetMapping("/me")
+    public ResponseEntity<DoctorDTO> me(){
+        return ResponseEntity.ok(doctorService.me());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDoctor(@PathVariable Long id){
-
-        doctorService.deleteDoctor(id);
-        return ResponseEntity.noContent().build();
-
+    @PutMapping("/me")
+    public ResponseEntity<DoctorDTO> updateMe(@RequestBody @Valid DoctorProfileUpdateDTO dto){
+        return ResponseEntity.ok(doctorService.updateMyProfile(dto));
     }
-
 
 }
