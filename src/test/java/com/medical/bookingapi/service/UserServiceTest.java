@@ -29,7 +29,6 @@ class UserServiceTest {
   void getUserByEmail_updatesLastLogin_saves_andReturnsDto() {
     String email = "user@example.com";
 
-    // Use a concrete entity (User is abstract / mapped superclass)
     Patient user = new Patient();
     user.setId(1L);
     user.setEmail(email);
@@ -38,12 +37,10 @@ class UserServiceTest {
     user.setRole("PATIENT");
 
     when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-    // Let save(...) return the same entity
     when(userRepository.save(any(User.class))).thenAnswer(inv -> inv.getArgument(0));
     UserResponseDTO mapped = new UserResponseDTO(); // adapt if yours needs fields
     when(userMapper.toDto(user)).thenReturn(mapped);
 
-    // Measure time bounds around the call so we can assert lastLogin was set "now"
     LocalDateTime before = LocalDateTime.now().minusSeconds(2);
 
     UserResponseDTO result = service.getUserByEmail(email);
@@ -51,7 +48,7 @@ class UserServiceTest {
     LocalDateTime after  = LocalDateTime.now().plusSeconds(2);
 
     assertSame(mapped, result);
-    // capture the saved user to assert lastLogin
+
     ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
     verify(userRepository).save(captor.capture());
     User saved = captor.getValue();
@@ -78,7 +75,7 @@ class UserServiceTest {
 
   @Test
   void updateLastLogin_updatesExistingUser_andSaves() {
-    // incoming "user" with only id set (how service expects it)
+
     Patient incoming = new Patient();
     incoming.setId(42L);
 

@@ -50,7 +50,7 @@ class PatientServiceTest {
     patient.setDateOfBirth(LocalDate.of(1995, 5, 5));
     patient.setRole("PATIENT");
 
-    patientDto = new PatientDTO(); // adapt if your DTO requires fields
+    patientDto = new PatientDTO(); 
   }
 
   @AfterEach
@@ -132,7 +132,7 @@ class PatientServiceTest {
     trySet(reg, "insuranceId", "INS-123");
     trySet(reg, "dateOfBirth", LocalDate.of(1995,5,5));
 
-    Patient mappedEntity = new Patient(); // what mapper produces from DTO
+    Patient mappedEntity = new Patient(); 
     when(patientMapper.toEntity(reg)).thenReturn(mappedEntity);
     when(passwordEncoder.encode("plain")).thenReturn("hashed");
     when(patientRepository.save(any(Patient.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -175,10 +175,9 @@ class PatientServiceTest {
 
     when(patientRepository.findByEmail("missing@x.com")).thenReturn(Optional.empty());
 
-    // Note: your code currently throws "Doctor not found" here (likely a typo).
     UsernameNotFoundException ex =
         assertThrows(UsernameNotFoundException.class, () -> service.me());
-    assertEquals("Doctor not found", ex.getMessage()); // if you fix the typo, change to "Patient not found"
+    assertEquals("Doctor not found", ex.getMessage()); 
   }
 
   // -------- updateMyProfile --------

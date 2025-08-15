@@ -32,31 +32,32 @@ class AuthControllerTest {
   @MockBean JwtFilter jwtFilter;
   @MockBean JwtService jwtService;
 
-  
   @Test
-  void register_shouldReturn201_andDelegateToService() throws Exception {
-    RegisterRequestDTO req = new RegisterRequestDTO();
-    // set whatever fields your DTO expects:
-    // e.g. req.setEmail("pat@example.com"); req.setPassword("secret123"); req.setRole("PATIENT");
-    // If your DTO has different names, set accordingly:
-    trySet(req, "email", "pat@example.com");
-    trySet(req, "password", "secret123");
-    trySet(req, "role", "PATIENT");
+void register_shouldReturn201_andDelegateToService() throws Exception {
+  RegisterRequestDTO req = new RegisterRequestDTO();
+  req.setFirstName("Pat");
+  req.setLastName("Patient");
+  req.setEmail("pat@example.com");
+  req.setPassword("secret123");
+  req.setRole("PATIENT"); // <-- the missing piece
 
-    String json = objectMapper.writeValueAsString(req);
+  String json = objectMapper.writeValueAsString(req);
 
-    mvc.perform(post("/api/auth/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-        .andExpect(status().isCreated())
-        .andExpect(content().string("Patient registered successfully."))
-        .andReturn();
+  mvc.perform(post("/api/auth/register")
+          .contentType(MediaType.APPLICATION_JSON)
+          .characterEncoding("utf-8")
+          .content(json))
+      .andExpect(status().isCreated())
+      .andExpect(content().string("Patient registered successfully."));
 
-    ArgumentCaptor<RegisterRequestDTO> captor = ArgumentCaptor.forClass(RegisterRequestDTO.class);
-    verify(authService, times(1)).registerPatient(captor.capture());
-    RegisterRequestDTO passed = captor.getValue();
-    assertThat(read(passed, "email")).isEqualTo("pat@example.com");
-  }
+  ArgumentCaptor<RegisterRequestDTO> captor = ArgumentCaptor.forClass(RegisterRequestDTO.class);
+  verify(authService, times(1)).registerPatient(captor.capture());
+  assertThat(captor.getValue().getEmail()).isEqualTo("pat@example.com");
+  assertThat(captor.getValue().getRole()).isEqualTo("PATIENT");
+}
+
+
+
 
   @Test
   void login_shouldReturn200_withUserResponse() throws Exception {
@@ -85,24 +86,31 @@ class AuthControllerTest {
     verify(authService, times(1)).login(any(UserLoginDTO.class));
   }
 
-  @Test
-  void register_whenServiceThrows_shouldReturn500_fromExceptionHandler() throws Exception {
-    RegisterRequestDTO req = new RegisterRequestDTO();
-    trySet(req, "email", "bad@example.com");
-    trySet(req, "password", "x");
-    trySet(req, "role", "PATIENT");
+@Test
+void register_whenServiceThrows_shouldReturn500_fromExceptionHandler() throws Exception {
+  RegisterRequestDTO req = new RegisterRequestDTO();
+  req.setFirstName("Pat");
+  req.setLastName("Patient");
+  req.setEmail("bad@example.com");
+  req.setPassword("secret123");
+  req.setRole("PATIENT"); // or enum constant if the field is an enum
 
-    doThrow(new RuntimeException("boom"))
-        .when(authService)
-        .registerPatient(any());
+  doThrow(new RuntimeException("boom"))
+      .when(authService)
+      .registerPatient(any());
 
-    mvc.perform(post("/api/auth/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(req)))
-        .andExpect(status().isInternalServerError())
-        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.error").value("Something went wrong"));
-  }
+  mvc.perform(post("/api/auth/register")
+          .contentType(MediaType.APPLICATION_JSON)
+          .characterEncoding("utf-8")
+          .content(objectMapper.writeValueAsString(req))
+          // if Spring Security filters are ON, add CSRF:
+          //.with(csrf())
+      )
+      .andExpect(status().isInternalServerError())
+      .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+      .andExpect(jsonPath("$.error").value("Something went wrong"));
+}
+
 
   @Test
   void login_whenInvalidPayload_shouldReturn400() throws Exception {

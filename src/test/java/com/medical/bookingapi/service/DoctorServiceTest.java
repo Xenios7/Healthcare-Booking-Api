@@ -48,7 +48,7 @@ class DoctorServiceTest {
     doctor.setLicenseNumber("NJ-0001");
     doctor.setRole("DOCTOR");
 
-    doctorDto = new DoctorDTO(); // adapt if your DTO needs specific fields
+    doctorDto = new DoctorDTO(); 
   }
 
   @AfterEach
@@ -139,7 +139,7 @@ class DoctorServiceTest {
     trySet(reg, "location", "Princeton-Plainsboro");
     trySet(reg, "licenseNumber", "NJ-0001");
 
-    Doctor mappedEntity = new Doctor(); // entity created by mapper from DTO
+    Doctor mappedEntity = new Doctor(); 
     when(doctorMapper.toEntity(reg)).thenReturn(mappedEntity);
     when(passwordEncoder.encode("plain")).thenReturn("hashed");
     when(doctorRepository.save(any(Doctor.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -228,7 +228,6 @@ class DoctorServiceTest {
     verify(doctorRepository, never()).save(any());
   }
 
-  // --- tiny reflection helper so tests compile even if DTOs are Lombok-only ---
   private static void trySet(Object target, String field, Object value) {
     try {
       var m = target.getClass().getMethod("set" + Character.toUpperCase(field.charAt(0)) + field.substring(1), value.getClass());

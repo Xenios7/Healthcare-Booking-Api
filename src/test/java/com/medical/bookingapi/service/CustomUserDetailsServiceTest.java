@@ -1,6 +1,6 @@
 package com.medical.bookingapi.service;
 
-import com.medical.bookingapi.model.Patient;     // ← concrete subclass of User
+import com.medical.bookingapi.model.Patient;     
 import com.medical.bookingapi.repository.UserRepository;
 import com.medical.bookingapi.security.CustomUserDetails;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,6 @@ class CustomUserDetailsServiceTest {
   void loadUserByUsername_returnsCustomUserDetails_whenUserExists() {
     String email = "jane@example.com";
 
-    // Use a concrete subclass of User
     Patient u = new Patient();
     u.setId(1L);
     u.setFirstName("Jane");
@@ -46,9 +45,7 @@ class CustomUserDetailsServiceTest {
     CustomUserDetails cud = (CustomUserDetails) details;
     assertSame(u, cud.getUser());
     assertFalse(details.getAuthorities().isEmpty());
-    // If your CustomUserDetails maps roles as ROLE_*
-    // assertTrue(details.getAuthorities().stream()
-    //     .anyMatch(a -> a.getAuthority().equals("ROLE_PATIENT")));
+
 
     verify(userRepository).findByEmail(email);
   }

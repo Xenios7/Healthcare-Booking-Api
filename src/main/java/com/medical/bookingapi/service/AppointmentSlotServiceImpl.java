@@ -93,19 +93,30 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
 
     @Override
     public AppointmentSlotDTO createSlot(SlotCreateDTO dto) {
-        
         AppointmentSlot slot = appointmentSlotMapper.toEntity(dto);
 
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
+            .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
 
-        //Foreign key, we need to set it manually
+        // Basic time sanity
+        if (slot.getStartTime() == null || slot.getEndTime() == null || !slot.getStartTime().isBefore(slot.getEndTime())) {
+            throw new IllegalArgumentException("Invalid slot time range");
+        }
+
+        // Foreign key + defaults
         slot.setDoctor(doctor);
         slot.setBooked(false);
 
-        return appointmentSlotMapper.toDto(appointmentSlotRepository.save(slot));
+        // Overlap guard for same doctor (adjacent is OK)
+        if (appointmentSlotRepository.existsOverlapping(doctor, slot.getStartTime(), slot.getEndTime())) {
+            throw new IllegalStateException("Overlapping slot for doctor");
+        }
 
+        AppointmentSlot saved = appointmentSlotRepository.save(slot);
+        return appointmentSlotMapper.toDto(saved);
     }
+
+
     @Override
     public AppointmentSlotDTO updateSlot(Long id, AppointmentSlotDTO dto) {
         AppointmentSlot slot = appointmentSlotRepository.findById(id)
@@ -113,25 +124,32 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
 
         boolean wasBooked = slot.isBooked();
         boolean wantsToUnbook = !dto.isBooked();
-
         if (wasBooked && !wantsToUnbook) {
             throw new IllegalStateException("Cannot update a booked slot.");
         }
 
-        // Set manually since they are foreign keys  
-        slot.setStartTime(dto.getStartTime());
-        slot.setEndTime(dto.getEndTime());
-        slot.setBooked(dto.isBooked());
-        slot.setNotes(dto.getNotes());
-
+        // Update foreign key if doctorId provided
         if (dto.getDoctorId() != null) {
             Doctor doctor = doctorRepository.findById(dto.getDoctorId())
                     .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + dto.getDoctorId()));
             slot.setDoctor(doctor);
         }
 
+        // Update times and other fields
+        slot.setStartTime(dto.getStartTime());
+        slot.setEndTime(dto.getEndTime());
+        slot.setBooked(dto.isBooked());
+        slot.setNotes(dto.getNotes());
+
+        // Now check for overlap using the NEW values
+        if (appointmentSlotRepository.existsOverlappingExcludingId(
+                slot.getDoctor(), slot.getId(), slot.getStartTime(), slot.getEndTime())) {
+            throw new IllegalStateException("Overlapping slot for doctor");
+        }
+
         return appointmentSlotMapper.toDto(appointmentSlotRepository.save(slot));
     }
+
 
     @Override
     public void deleteSlot(Long id) {

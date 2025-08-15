@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.medical.bookingapi.dto.AppointmentCreateDTO;
@@ -17,8 +17,6 @@ import com.medical.bookingapi.model.Patient;
 import com.medical.bookingapi.repository.AppointmentRepository;
 import com.medical.bookingapi.repository.DoctorRepository;
 import com.medical.bookingapi.repository.PatientRepository;
-
-import jakarta.persistence.EntityNotFoundException;
 
 import com.medical.bookingapi.repository.AppointmentSlotRepository;
 
@@ -37,7 +35,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentDTO> findByDoctorId(Long doctorId) {
         Doctor doctor = doctorRepository.findById(doctorId)
-            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+            .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
         
         List<Appointment> appointments = appointmentRepository.findByDoctor(doctor);
 
@@ -51,7 +49,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<AppointmentDTO> findByPatientId(Long patientId) {
     
         Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
 
         List<Appointment> appointments = appointmentRepository.findByPatient(patient);
 
@@ -63,7 +61,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Optional<AppointmentDTO> findBySlotId(Long slotId) {
         AppointmentSlot slot = slotRepository.findById(slotId)
-            .orElseThrow(() -> new UsernameNotFoundException("Slot not found"));
+            .orElseThrow(() -> new EntityNotFoundException("Slot not found"));
 
         return appointmentRepository.findBySlot(slot)
                 .map(appointmentMapper::toDto);
@@ -89,7 +87,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentDTO> findByDoctorAndStatus(Long doctorId, String status) {
         Doctor doctor = doctorRepository.findById(doctorId)
-            .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+            .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
         List<Appointment> appointments = appointmentRepository.findByDoctorAndStatus(doctor, status);
 
         return appointments.stream()
@@ -104,13 +102,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         //Need to manually set this fields since they are foreign keys
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-                .orElseThrow(() -> new UsernameNotFoundException("Doctor not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
 
         Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new UsernameNotFoundException("Patient not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
 
         AppointmentSlot slot = slotRepository.findById(dto.getSlotId())
-                .orElseThrow(() -> new UsernameNotFoundException("Slot not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Slot not found"));
 
         appointment.setDoctor(doctor);
         appointment.setPatient(patient);
@@ -121,15 +119,29 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentDTO updateStatus(Long appointmentId, String newStatus) {
+    public AppointmentDTO updateStatus(Long id, String newStatus) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found with ID: " + id));
 
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new UsernameNotFoundException("Appointment not found"));
-        
+        String current = appointment.getStatus();
+        newStatus = newStatus.toUpperCase();
+
+        if (current.equals("PENDING")) {
+            if (!(newStatus.equals("CONFIRMED") || newStatus.equals("CANCELLED"))) {
+                throw new IllegalStateException("Invalid status transition");
+            }
+        } else if (current.equals("CONFIRMED")) {
+            if (!newStatus.equals("CANCELLED")) {
+                throw new IllegalStateException("Invalid status transition");
+            }
+        } else if (current.equals("CANCELLED")) {
+            throw new IllegalStateException("Invalid status transition");
+        }
+
         appointment.setStatus(newStatus);
         return appointmentMapper.toDto(appointmentRepository.save(appointment));
     }
-    
+
     @Override
     public void deleteAppointment(Long id) {
         if (!appointmentRepository.existsById(id)) {

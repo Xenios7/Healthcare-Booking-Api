@@ -1,7 +1,15 @@
 server:
   port: 0
+
 spring:
   main:
     banner-mode: "off"
   jpa:
     show-sql: false
+
+logging:
+  level:
+    root: ERROR
+    "[org.springframework.test]": INFO
+    "[org.testcontainers]": WARN
+    "[com.github.dockerjava]": WARN

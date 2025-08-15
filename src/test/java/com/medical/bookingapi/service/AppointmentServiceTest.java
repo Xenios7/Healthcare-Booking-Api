@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -67,7 +66,7 @@ class AppointmentServiceTest {
     appt.setSlot(slot);
     appt.setStatus("BOOKED");
 
-    dtoMapped = new AppointmentDTO(); // adjust if your DTO has required fields
+    dtoMapped = new AppointmentDTO(); 
   }
 
   // ---------- Reads ----------
@@ -90,7 +89,7 @@ class AppointmentServiceTest {
   @Test
   void findByDoctorId_throwsWhenDoctorMissing() {
     when(doctorRepository.findById(9L)).thenReturn(Optional.empty());
-    var ex = assertThrows(UsernameNotFoundException.class, () -> service.findByDoctorId(9L));
+    var ex = assertThrows(EntityNotFoundException.class, () -> service.findByDoctorId(9L));
     assertEquals("Doctor not found", ex.getMessage());
   }
 
@@ -124,7 +123,7 @@ class AppointmentServiceTest {
   @Test
   void findBySlotId_throwsWhenSlotMissing() {
     when(slotRepository.findById(111L)).thenReturn(Optional.empty());
-    var ex = assertThrows(UsernameNotFoundException.class, () -> service.findBySlotId(111L));
+    var ex = assertThrows(EntityNotFoundException.class, () -> service.findBySlotId(111L));
     assertEquals("Slot not found", ex.getMessage());
   }
 
@@ -163,9 +162,7 @@ class AppointmentServiceTest {
 
   @Test
   void bookAppointment_mapsEntity_setsRelations_andSaves() {
-    // Arrange input DTO
     AppointmentCreateDTO create = new AppointmentCreateDTO();
-    // assuming setters exist; if not, replace with your builder/record constructor
     trySet(create, "doctorId", 7L);
     trySet(create, "patientId", 3L);
     trySet(create, "slotId", 100L);
@@ -209,7 +206,7 @@ class AppointmentServiceTest {
     when(appointmentMapper.toEntity(create)).thenReturn(new Appointment());
     when(doctorRepository.findById(99L)).thenReturn(Optional.empty());
 
-    var ex = assertThrows(UsernameNotFoundException.class, () -> service.bookAppointment(create));
+    var ex = assertThrows(EntityNotFoundException.class, () -> service.bookAppointment(create));
     assertEquals("Doctor not found", ex.getMessage());
     verify(appointmentRepository, never()).save(any());
   }
@@ -225,7 +222,7 @@ class AppointmentServiceTest {
     when(doctorRepository.findById(7L)).thenReturn(Optional.of(doctor));
     when(patientRepository.findById(33L)).thenReturn(Optional.empty());
 
-    var ex = assertThrows(UsernameNotFoundException.class, () -> service.bookAppointment(create));
+    var ex = assertThrows(EntityNotFoundException.class, () -> service.bookAppointment(create));
     assertEquals("Patient not found", ex.getMessage());
     verify(appointmentRepository, never()).save(any());
   }
@@ -242,7 +239,7 @@ class AppointmentServiceTest {
     when(patientRepository.findById(3L)).thenReturn(Optional.of(patient));
     when(slotRepository.findById(101L)).thenReturn(Optional.empty());
 
-    var ex = assertThrows(UsernameNotFoundException.class, () -> service.bookAppointment(create));
+    var ex = assertThrows(EntityNotFoundException.class, () -> service.bookAppointment(create));
     assertEquals("Slot not found", ex.getMessage());
     verify(appointmentRepository, never()).save(any());
   }
@@ -263,13 +260,15 @@ class AppointmentServiceTest {
     verify(appointmentRepository).save(appt);
     verify(appointmentMapper).toDto(appt);
   }
-
+  
   @Test
   void updateStatus_throwsWhenMissing() {
-    when(appointmentRepository.findById(999L)).thenReturn(Optional.empty());
-    var ex = assertThrows(UsernameNotFoundException.class, () -> service.updateStatus(999L, "CANCELLED"));
-    assertEquals("Appointment not found", ex.getMessage());
+      when(appointmentRepository.findById(999L)).thenReturn(Optional.empty());
+      var ex = assertThrows(EntityNotFoundException.class,
+              () -> service.updateStatus(999L, "CANCELLED"));
+      assertEquals("Appointment not found with ID: 999", ex.getMessage());
   }
+
 
   // ---------- Delete ----------
 

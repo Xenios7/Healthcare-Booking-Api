@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medical.bookingapi.auth.AuthService;
 import com.medical.bookingapi.dto.*;
 import com.medical.bookingapi.security.JwtFilter;
-import com.medical.bookingapi.security.JwtService;
 import com.medical.bookingapi.service.AdminService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,6 @@ class AdminControllerTest {
 
   // Satisfy context if your app registers these beans
   @MockBean JwtFilter jwtFilter;
-  @MockBean JwtService jwtService;
 
   // ----------- Provisioning endpoints (require ADMIN role) -----------
 
