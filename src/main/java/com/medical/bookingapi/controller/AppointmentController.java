@@ -3,6 +3,7 @@ package com.medical.bookingapi.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,6 +64,7 @@ public class AppointmentController {
             return ResponseEntity.ok(appointments);
     }
 
+    @PreAuthorize("hasRole('PATIENT')")
     @PostMapping
     public ResponseEntity<AppointmentDTO> bookAppointment(@RequestBody @Valid AppointmentCreateDTO dto){
 
@@ -71,11 +73,13 @@ public class AppointmentController {
 
     }
 
+
+    // Only DOCTOR can update status 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<AppointmentDTO> updateAppointmentStatus(
             @PathVariable Long id,
             @RequestParam String status) {
-
         AppointmentDTO updated = appointmentService.updateStatus(id, status);
         return ResponseEntity.ok(updated);
     }

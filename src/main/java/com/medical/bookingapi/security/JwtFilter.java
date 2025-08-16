@@ -9,12 +9,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -29,49 +34,49 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 1. Extract the Authorization header
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String jwt;
-        final String username;
-
-        // 2. If no Authorization header or it doesn't start with "Bearer ", skip the filter
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 3. Extract the token from the header
-        jwt = authHeader.substring(7); // Removes "Bearer " prefix
+        final String jwt = authHeader.substring(7);
+        final String username = jwtService.extractUsername(jwt);
 
-        // 4. Extract username (email) from the token using the JwtService
-        username = jwtService.extractUsername(jwt);
-
-        // 5. If we have a username and the user is not yet authenticated in this context
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // 6. Load the user from the DB
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // 7. Validate the token against the user’s details
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                // 8. Create an authentication token
+
+                // --- build authorities in the shape @PreAuthorize expects ---
+                // If your token has a "role" claim like "DOCTOR" / "PATIENT" / "ADMIN",
+                // convert it to "ROLE_DOCTOR" etc. for hasRole('...') to work.
+                String roleFromToken = jwtService.extractRole(jwt); // implement if not present
+                Collection<? extends GrantedAuthority> authorities;
+
+                if (roleFromToken != null && !roleFromToken.isBlank()) {
+                    String authority = roleFromToken.startsWith("ROLE_")
+                            ? roleFromToken
+                            : "ROLE_" + roleFromToken;
+                    authorities = List.of(new SimpleGrantedAuthority(authority));
+                } else {
+                    // fallback to authorities provided by UserDetails (unchanged behavior)
+                    authorities = userDetails.getAuthorities();
+                }
+                // -------------------------------------------------------------
+
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
-                                userDetails.getAuthorities()
+                                authorities
                         );
 
-                // 9. Set additional authentication details (e.g., IP address, session info)
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-
-                // 10. Set the authentication in the security context
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        // 11. Continue with the filter chain
         filterChain.doFilter(request, response);
     }
 }

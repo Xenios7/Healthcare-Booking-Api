@@ -1,6 +1,13 @@
 server:
   port: 0
 
+security:
+  jwt:
+    # 32-byte key (Base64). Keep the quotes to avoid parsing issues with '+' and '='
+    secret: 'kztivzfn2xsCsQ0D+yfCqNIHTNvtHEcexKJSWoxcp2g='
+    issuer: 'bookingapi-test'
+    expiration: PT1H
+
 spring:
   main:
     banner-mode: "off"

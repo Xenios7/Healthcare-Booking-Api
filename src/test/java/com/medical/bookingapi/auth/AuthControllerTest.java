@@ -132,6 +132,7 @@ void register_whenServiceThrows_shouldReturn500_fromExceptionHandler() throws Ex
       m.invoke(target, value);
     } catch (Exception ignored) { /* if field not present, ignore so you can adapt later */ }
   }
+  @SuppressWarnings("unused")
   private static Object read(Object target, String field) {
     try {
       var m = target.getClass().getMethod("get" + capitalize(field));
