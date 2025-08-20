@@ -33,25 +33,25 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
-      <!-- Force Byte Buddy versions compatible with Java 23 for Mockito Inline -->
-<!-- Byte Buddy for JDK 23 -->
-<dependency>
-  <groupId>net.bytebuddy</groupId>
-  <artifactId>byte-buddy</artifactId>
-  <version>1.15.10</version>
-  <scope>test</scope>
-</dependency>
-<dependency>
-  <groupId>net.bytebuddy</groupId>
-  <artifactId>byte-buddy-agent</artifactId>
-  <version>1.15.10</version>
-  <scope>test</scope>
-</dependency>
     </dependencies>
   </dependencyManagement>
 
+
   <dependencies>
+
+  <!-- in your <dependencies> (NOT dependencyManagement) -->
+  <dependency>
+    <groupId>net.bytebuddy</groupId>
+    <artifactId>byte-buddy</artifactId>
+    <version>1.15.10</version>
+  </dependency>
+
+  <dependency>
+    <groupId>net.bytebuddy</groupId>
+    <artifactId>byte-buddy-agent</artifactId>
+    <version>1.15.10</version>
+    <scope>test</scope>
+  </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>

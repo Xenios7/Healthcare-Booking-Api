@@ -17,49 +17,28 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-    // Convert user's role to GrantedAuthority
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-
+        // DB already stores values like "ROLE_ADMIN" / "ROLE_DOCTOR" / "ROLE_PATIENT"
+        return List.of(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override
-
-
-    
     public String getPassword() {
-        return user.getPassword_hash(); // match your entity field
+        return user.getPassword_hash();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail(); // login will use email
+        return user.getEmail();
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true; // change if you add account expiration logic
-    }
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; // change if you add locking
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; // change if you add credential expiration logic
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true; // add a field like 'isEnabled' if needed
-    }
-
-    public User getUser() {
-        return user;
-    }
+    public User getUser() { return user; }
 
     @Override
     public boolean equals(Object o) {
