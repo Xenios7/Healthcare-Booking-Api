@@ -74,15 +74,26 @@ public class AppointmentController {
     }
 
 
-    // Only DOCTOR can update status 
+    // Accept status via ?status=... OR { "status": "..." }
+    @PreAuthorize("hasAnyRole('DOCTOR','ADMIN')")
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<AppointmentDTO> updateAppointmentStatus(
             @PathVariable Long id,
-            @RequestParam String status) {
+            @RequestParam(value = "status", required = false) String statusParam,
+            @RequestBody(required = false) java.util.Map<String, String> body) {
+
+        String status = statusParam;
+        if ((status == null || status.isBlank()) && body != null) {
+            status = body.get("status");
+        }
+        if (status == null || status.isBlank()) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "Missing status");
+        }
         AppointmentDTO updated = appointmentService.updateStatus(id, status);
         return ResponseEntity.ok(updated);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {

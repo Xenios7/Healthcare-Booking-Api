@@ -2,10 +2,14 @@ package com.medical.bookingapi.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityNotFoundException;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.medical.bookingapi.dto.AppointmentCreateDTO;
 import com.medical.bookingapi.dto.AppointmentDTO;
@@ -95,53 +99,81 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .collect(Collectors.toList());        
     }
 
-    @Override
-    public AppointmentDTO bookAppointment(AppointmentCreateDTO dto) {
+@Override
+public AppointmentDTO bookAppointment(AppointmentCreateDTO dto) {
+    // Resolve FKs
+    Doctor doctor = doctorRepository.findById(dto.getDoctorId())
+        .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
 
-        Appointment appointment = appointmentMapper.toEntity(dto);
+    Patient patient = patientRepository.findById(dto.getPatientId())
+        .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
 
-        //Need to manually set this fields since they are foreign keys
-        Doctor doctor = doctorRepository.findById(dto.getDoctorId())
-                .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
+    AppointmentSlot slot = slotRepository.findById(dto.getSlotId())
+        .orElseThrow(() -> new EntityNotFoundException("Slot not found"));
 
-        Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
-
-        AppointmentSlot slot = slotRepository.findById(dto.getSlotId())
-                .orElseThrow(() -> new EntityNotFoundException("Slot not found"));
-
-        appointment.setDoctor(doctor);
-        appointment.setPatient(patient);
-        appointment.setSlot(slot);
-        appointment.setStatus("BOOKED");
-         
-        return appointmentMapper.toDto(appointmentRepository.save(appointment));
+    // Guard: slot must belong to the same doctor the patient picked
+    if (slot.getDoctor() == null || !slot.getDoctor().getId().equals(doctor.getId())) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Slot does not belong to the selected doctor");
     }
 
-    @Override
-    public AppointmentDTO updateStatus(Long id, String newStatus) {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found with ID: " + id));
+    // Guard: slot must be free
+    if (slot.isBooked() || appointmentRepository.existsBySlot(slot)) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Slot already booked");
+    }
 
-        String current = appointment.getStatus();
-        newStatus = newStatus.toUpperCase();
+    // Map DTO -> entity (notes, etc.)
+    Appointment appointment = appointmentMapper.toEntity(dto);
+    appointment.setDoctor(doctor);
+    appointment.setPatient(patient);
+    appointment.setSlot(slot);
 
-        if (current.equals("PENDING")) {
-            if (!(newStatus.equals("CONFIRMED") || newStatus.equals("CANCELLED"))) {
-                throw new IllegalStateException("Invalid status transition");
-            }
-        } else if (current.equals("CONFIRMED")) {
-            if (!newStatus.equals("CANCELLED")) {
-                throw new IllegalStateException("Invalid status transition");
-            }
-        } else if (current.equals("CANCELLED")) {
-            throw new IllegalStateException("Invalid status transition");
+    // Align with UI workflow: new appointments start as PENDING
+    appointment.setStatus("PENDING");
+
+    Appointment saved = appointmentRepository.save(appointment);
+
+    // Reserve the slot so it disappears from "available" lists
+    slot.setBooked(true);
+    slotRepository.save(slot);
+
+    return appointmentMapper.toDto(saved);
+}
+
+@Override
+public AppointmentDTO updateStatus(Long id, String newStatus) {
+    Appointment appointment = appointmentRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Appointment not found with ID: " + id));
+
+    String current = appointment.getStatus();
+    newStatus = newStatus.toUpperCase();
+
+    // Allowed transitions for your UI:
+    // PENDING -> APPROVED | REJECTED | CANCELLED
+    // APPROVED -> CANCELLED
+    // REJECTED -> (none)
+    // CANCELLED -> (none)
+    boolean ok =
+        ("PENDING".equals(current) && Set.of("APPROVED", "REJECTED", "CANCELLED").contains(newStatus)) ||
+        ("APPROVED".equals(current) && "CANCELLED".equals(newStatus));
+
+    if (!ok) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            "Invalid status transition: " + current + " -> " + newStatus);
+    }
+
+    appointment.setStatus(newStatus);
+
+    // Free the slot when the appt is REJECTED or CANCELLED
+    if ("REJECTED".equals(newStatus) || "CANCELLED".equals(newStatus)) {
+        AppointmentSlot slot = appointment.getSlot();
+        if (slot != null && slot.isBooked()) {
+            slot.setBooked(false);
+            slotRepository.save(slot);
         }
-
-        appointment.setStatus(newStatus);
-        return appointmentMapper.toDto(appointmentRepository.save(appointment));
     }
 
+    return appointmentMapper.toDto(appointmentRepository.save(appointment));
+}
     @Override
     public void deleteAppointment(Long id) {
         if (!appointmentRepository.existsById(id)) {
