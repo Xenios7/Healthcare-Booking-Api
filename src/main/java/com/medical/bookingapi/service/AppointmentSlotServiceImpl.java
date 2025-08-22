@@ -107,6 +107,8 @@ public class AppointmentSlotServiceImpl implements AppointmentSlotService {
         slot.setDoctor(doctor);
         slot.setBooked(false);
 
+        slot.setLocation(dto.getLocation());  
+        slot.setNotes(dto.getNotes());        
         // Overlap guard for same doctor (adjacent is OK)
         if (appointmentSlotRepository.existsOverlapping(doctor, slot.getStartTime(), slot.getEndTime())) {
             throw new IllegalStateException("Overlapping slot for doctor");

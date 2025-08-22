@@ -21,5 +21,6 @@ public class SlotCreateDTO {
     @Future    
     private LocalDateTime endTime;
     private String notes;
+    private String location;   
 
 }

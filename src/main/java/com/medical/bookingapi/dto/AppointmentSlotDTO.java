@@ -12,6 +12,7 @@ public class AppointmentSlotDTO {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private boolean booked;
+    private String location;
     private String notes;
 
 }

@@ -40,5 +40,6 @@ public class AppointmentSlot {
     @Column(columnDefinition = "text")
     private String notes;
 
-
+    @Column(name = "location")       
+    private String location;
 }
