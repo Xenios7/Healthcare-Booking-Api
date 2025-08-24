@@ -7,7 +7,9 @@ import com.medical.bookingapi.security.CustomUserDetails;
 import com.medical.bookingapi.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,10 +41,10 @@ class AuthServiceTest {
         authService.registerPatient(dto);
 
         verify(userRepository).save(argThat(user ->
-            user instanceof Patient &&
-            ((Patient) user).getFirstName().equals("John") &&
-            ((Patient) user).getRole().equals("PATIENT") &&
-            ((Patient) user).getPassword_hash().equals("encoded")
+            user instanceof Patient p &&
+            p.getFirstName().equals("John") &&
+            p.getRole().equals("PATIENT") &&
+            p.getPassword_hash().equals("encoded")
         ));
     }
 

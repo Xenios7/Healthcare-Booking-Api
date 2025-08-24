@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-  @Bean
-  public OpenAPI api() {
+    @Bean
+    OpenAPI api() {
     return new OpenAPI()
         .info(new Info()
             .title("Medical Booking API")
