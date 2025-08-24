@@ -1,8 +1,6 @@
 package com.medical.bookingapi.security;
 
 import com.medical.bookingapi.model.User;
-
-// RIGHT
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.jsonwebtoken.*;
@@ -10,13 +8,15 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import javax.crypto.SecretKey;
 
+import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
@@ -26,49 +26,45 @@ import java.util.function.Function;
 public class JwtService {
     private static final Logger log = LoggerFactory.getLogger(JwtService.class);
 
-    // Put a Base64-encoded 32+ byte value in application*.yml: security.jwt.secret: "...."
     @Value("${security.jwt.secret}")
-    private String secretBase64;
+    private String secret;
 
     private static final Duration EXPIRATION = Duration.ofHours(10);
-
     private SecretKey key;
 
     @PostConstruct
-    void init() {
-        String s = secretBase64 == null ? "" : secretBase64.trim();
-        byte[] keyBytes;
-        String decodedAs;
+    public void init() {
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException("security.jwt.secret is missing or blank");
+        }
 
+        byte[] raw;
         try {
-            // Standard Base64 (uses + and /)
-            keyBytes = Decoders.BASE64.decode(s);
-            decodedAs = "Base64";
+            raw = Decoders.BASE64.decode(secret);
+            log.info("JWT secret decoded as Base64 ({} bytes).", raw.length);
         } catch (DecodingException e1) {
             try {
-                // URL-safe Base64 (uses - and _)
-                keyBytes = Decoders.BASE64URL.decode(s);
-                decodedAs = "Base64URL";
+                raw = Decoders.BASE64URL.decode(secret);
+                log.info("JWT secret decoded as Base64URL ({} bytes).", raw.length);
             } catch (DecodingException e2) {
-                // Fallback: treat as plain text bytes
-                keyBytes = s.getBytes(StandardCharsets.UTF_8);
-                decodedAs = "plain UTF-8";
+                raw = secret.getBytes(StandardCharsets.UTF_8);
+                log.info("JWT secret treated as raw UTF-8 ({} bytes).", raw.length);
             }
         }
 
-        log.info("JWT key bytes: {} (decoded as {})", keyBytes.length, decodedAs);
-
-        if (keyBytes.length < 32) {
-            throw new IllegalStateException(
-                "security.jwt.secret must be a 32+ byte key (or Base64/Base64URL of that). "
-                + "Current length: " + keyBytes.length + " bytes"
-            );
+        // Ensure >= 32 bytes: if shorter, derive a 32-byte material using SHA-256.
+        byte[] material = raw;
+        if (material.length < 32) {
+            try {
+                material = MessageDigest.getInstance("SHA-256").digest(material);
+                log.warn("JWT secret was <32 bytes; derived 32-byte HMAC key via SHA-256.");
+            } catch (NoSuchAlgorithmException e) {
+                throw new IllegalStateException("SHA-256 not available", e);
+            }
         }
 
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.key = Keys.hmacShaKeyFor(material);
     }
-
-
 
     private JwtParser parser() {
         return Jwts.parserBuilder().setSigningKey(key).build();
@@ -79,24 +75,16 @@ public class JwtService {
         Instant now = Instant.now();
         return Jwts.builder()
                 .setSubject(user.getEmail())
-                .claim("role", user.getRole())   
+                .claim("role", user.getRole())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(EXPIRATION)))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public String extractEmail(String token) {
-        return extractUsername(token);
-    }
-
-    public String extractRole(String token) {
-        return extractClaim(token, c -> c.get("role", String.class));
-    }
+    public String extractUsername(String token) { return extractClaim(token, Claims::getSubject); }
+    public String extractEmail(String token)    { return extractUsername(token); }
+    public String extractRole(String token)     { return extractClaim(token, c -> c.get("role", String.class)); }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
@@ -104,7 +92,7 @@ public class JwtService {
             Date exp = extractClaim(token, Claims::getExpiration);
             return userDetails.getUsername().equals(username) && exp.after(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            return false; // malformed/expired/invalid signature -> not valid
+            return false;
         }
     }
 

@@ -15,4 +15,4 @@ server:
 
 security:
   jwt:
-    secret: kztivzfn2xsCsQ0D+yfCqNIHTNvtHEcexKJSWoxcp2g=
+    secret: "kztivzfn2xsCsQ0D-yfCqNIHTNvtHEcexKJSWoxcp2g="

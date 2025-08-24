@@ -1,6 +1,7 @@
 package com.medical.bookingapi.security;
 
 import com.medical.bookingapi.service.CustomUserDetailsService;
+import io.jsonwebtoken.JwtException;
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,17 +42,26 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         final String jwt = authHeader.substring(7);
-        final String username = jwtService.extractUsername(jwt);
+        final String username;
+
+        // Return 401 (not 403) for malformed/invalid tokens
+        try {
+            username = jwtService.extractUsername(jwt);
+        } catch (JwtException | IllegalArgumentException ex) {
+            SecurityContextHolder.clearContext();
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"invalid_token\"}");
+            return;
+        }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
 
-                // --- build authorities in the shape @PreAuthorize expects ---
-                // If your token has a "role" claim like "DOCTOR" / "PATIENT" / "ADMIN",
-                // convert it to "ROLE_DOCTOR" etc. for hasRole('...') to work.
-                String roleFromToken = jwtService.extractRole(jwt); // implement if not present
+                // Map token role (e.g. "DOCTOR") to Spring authorities ("ROLE_DOCTOR")
+                String roleFromToken = jwtService.extractRole(jwt); // this method should read the "role" claim
                 Collection<? extends GrantedAuthority> authorities;
 
                 if (roleFromToken != null && !roleFromToken.isBlank()) {
@@ -60,18 +70,11 @@ public class JwtFilter extends OncePerRequestFilter {
                             : "ROLE_" + roleFromToken;
                     authorities = List.of(new SimpleGrantedAuthority(authority));
                 } else {
-                    // fallback to authorities provided by UserDetails (unchanged behavior)
                     authorities = userDetails.getAuthorities();
                 }
-                // -------------------------------------------------------------
 
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                authorities
-                        );
-
+                        new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

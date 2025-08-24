@@ -12,6 +12,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -22,6 +23,9 @@ import static org.hamcrest.Matchers.*;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = {
+    "security.jwt.secret=qSrvQr8r9uWK9Jvt-IrUjTTcFCqynFhu0COsp77gn8w="
+})
 class BookingFlowIT {
 
   @BeforeAll

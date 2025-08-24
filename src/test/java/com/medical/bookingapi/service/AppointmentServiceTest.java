@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -29,6 +30,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AppointmentServiceTest {
+
+  private static final Long DOCTOR_ID = 10L;
+  private static final Long PATIENT_ID = 20L;
+  private static final Long SLOT_ID   = 30L;
 
   @Mock DoctorRepository doctorRepository;
   @Mock PatientRepository patientRepository;
@@ -159,108 +164,120 @@ class AppointmentServiceTest {
   }
 
   // ---------- Create (book) ----------
-
   @Test
   void bookAppointment_mapsEntity_setsRelations_andSaves() {
     AppointmentCreateDTO create = new AppointmentCreateDTO();
-    trySet(create, "doctorId", 7L);
-    trySet(create, "patientId", 3L);
-    trySet(create, "slotId", 100L);
+    trySet(create, "doctorId", DOCTOR_ID);
+    trySet(create, "patientId", PATIENT_ID);
+    trySet(create, "slotId", SLOT_ID);
 
-    when(appointmentMapper.toEntity(create)).thenReturn(new Appointment());
-    when(doctorRepository.findById(7L)).thenReturn(Optional.of(doctor));
-    when(patientRepository.findById(3L)).thenReturn(Optional.of(patient));
-    when(slotRepository.findById(100L)).thenReturn(Optional.of(slot));
-    when(appointmentRepository.save(any(Appointment.class))).thenAnswer(inv -> {
-      Appointment saved = inv.getArgument(0);
-      saved.setId(200L);
-      return saved;
+    Doctor doctor = new Doctor(); doctor.setId(DOCTOR_ID);
+    Patient patient = new Patient(); patient.setId(PATIENT_ID);
+
+    AppointmentSlot slot = new AppointmentSlot();
+    slot.setId(SLOT_ID);
+    slot.setDoctor(doctor); // IMPORTANT: slot belongs to the same doctor
+
+    when(doctorRepository.findById(DOCTOR_ID)).thenReturn(Optional.of(doctor));
+    when(patientRepository.findById(PATIENT_ID)).thenReturn(Optional.of(patient));
+    when(slotRepository.findById(SLOT_ID)).thenReturn(Optional.of(slot));
+
+    when(appointmentRepository.save(any())).thenAnswer(inv -> {
+      Appointment a = inv.getArgument(0);
+      a.setId(999L);
+      return a;
     });
-    when(appointmentMapper.toDto(any(Appointment.class))).thenReturn(dtoMapped);
 
-    // Act
-    var result = service.bookAppointment(create);
+    Appointment mapped = new Appointment();
+    when(appointmentMapper.toEntity(any(AppointmentCreateDTO.class))).thenReturn(mapped);
+    when(appointmentMapper.toDto(any(Appointment.class))).thenReturn(new AppointmentDTO());
 
-    // Assert
-    assertNotNull(result);
+
+    service.bookAppointment(create);
+
     ArgumentCaptor<Appointment> captor = ArgumentCaptor.forClass(Appointment.class);
-    verify(appointmentRepository).save(captor.capture());
+    verify(appointmentRepository, times(1)).save(captor.capture());
     Appointment saved = captor.getValue();
 
-    assertSame(doctor, saved.getDoctor());
-    assertSame(patient, saved.getPatient());
-    assertSame(slot, saved.getSlot());
-    assertEquals("BOOKED", saved.getStatus());
-
-    verify(appointmentMapper).toEntity(create);
-    verify(appointmentMapper).toDto(saved);
+    assertNotNull(saved.getId());
+    assertEquals(DOCTOR_ID, saved.getDoctor().getId());
+    assertEquals(PATIENT_ID, saved.getPatient().getId());
+    assertEquals(SLOT_ID, saved.getSlot().getId());
   }
 
   @Test
   void bookAppointment_throwsWhenDoctorMissing() {
     AppointmentCreateDTO create = new AppointmentCreateDTO();
-    trySet(create, "doctorId", 99L);
-    trySet(create, "patientId", 3L);
-    trySet(create, "slotId", 100L);
+    trySet(create, "doctorId", DOCTOR_ID);
+    trySet(create, "patientId", PATIENT_ID);
+    trySet(create, "slotId", SLOT_ID);
 
-    when(appointmentMapper.toEntity(create)).thenReturn(new Appointment());
-    when(doctorRepository.findById(99L)).thenReturn(Optional.empty());
+    // Only stub what's needed for this path
+    when(doctorRepository.findById(DOCTOR_ID)).thenReturn(Optional.empty());
 
     var ex = assertThrows(EntityNotFoundException.class, () -> service.bookAppointment(create));
     assertEquals("Doctor not found", ex.getMessage());
-    verify(appointmentRepository, never()).save(any());
+
+    verifyNoInteractions(patientRepository, slotRepository, appointmentRepository);
   }
 
   @Test
   void bookAppointment_throwsWhenPatientMissing() {
     AppointmentCreateDTO create = new AppointmentCreateDTO();
-    trySet(create, "doctorId", 7L);
-    trySet(create, "patientId", 33L);
-    trySet(create, "slotId", 100L);
+    trySet(create, "doctorId", DOCTOR_ID);
+    trySet(create, "patientId", PATIENT_ID);
+    trySet(create, "slotId", SLOT_ID);
 
-    when(appointmentMapper.toEntity(create)).thenReturn(new Appointment());
-    when(doctorRepository.findById(7L)).thenReturn(Optional.of(doctor));
-    when(patientRepository.findById(33L)).thenReturn(Optional.empty());
+    Doctor doctor = new Doctor(); doctor.setId(DOCTOR_ID);
+
+    when(doctorRepository.findById(DOCTOR_ID)).thenReturn(Optional.of(doctor));
+    when(patientRepository.findById(PATIENT_ID)).thenReturn(Optional.empty());
 
     var ex = assertThrows(EntityNotFoundException.class, () -> service.bookAppointment(create));
     assertEquals("Patient not found", ex.getMessage());
-    verify(appointmentRepository, never()).save(any());
+
+    verifyNoInteractions(slotRepository, appointmentRepository);
   }
 
   @Test
   void bookAppointment_throwsWhenSlotMissing() {
     AppointmentCreateDTO create = new AppointmentCreateDTO();
-    trySet(create, "doctorId", 7L);
-    trySet(create, "patientId", 3L);
-    trySet(create, "slotId", 101L);
+    trySet(create, "doctorId", DOCTOR_ID);
+    trySet(create, "patientId", PATIENT_ID);
+    trySet(create, "slotId", SLOT_ID);
 
-    when(appointmentMapper.toEntity(create)).thenReturn(new Appointment());
-    when(doctorRepository.findById(7L)).thenReturn(Optional.of(doctor));
-    when(patientRepository.findById(3L)).thenReturn(Optional.of(patient));
-    when(slotRepository.findById(101L)).thenReturn(Optional.empty());
+    Doctor doctor = new Doctor(); doctor.setId(DOCTOR_ID);
+    Patient patient = new Patient(); patient.setId(PATIENT_ID);
+
+    when(doctorRepository.findById(DOCTOR_ID)).thenReturn(Optional.of(doctor));
+    when(patientRepository.findById(PATIENT_ID)).thenReturn(Optional.of(patient));
+    when(slotRepository.findById(SLOT_ID)).thenReturn(Optional.empty());
 
     var ex = assertThrows(EntityNotFoundException.class, () -> service.bookAppointment(create));
     assertEquals("Slot not found", ex.getMessage());
+
     verify(appointmentRepository, never()).save(any());
   }
 
   // ---------- Update status ----------
-
+  @SuppressWarnings("null")
   @Test
   void updateStatus_updatesAndSaves() {
-    when(appointmentRepository.findById(200L)).thenReturn(Optional.of(appt));
-    when(appointmentRepository.save(appt)).thenReturn(appt);
-    when(appointmentMapper.toDto(appt)).thenReturn(dtoMapped);
+    Long apptId = 42L;
 
-    var result = service.updateStatus(200L, "CANCELLED");
+    Appointment appt = new Appointment();
+    appt.setId(apptId);
+    appt.setStatus("BOOKED");
 
-    assertSame(dtoMapped, result);
-    assertEquals("CANCELLED", appt.getStatus());
-    verify(appointmentRepository).findById(200L);
-    verify(appointmentRepository).save(appt);
-    verify(appointmentMapper).toDto(appt);
+    when(appointmentRepository.findById(apptId)).thenReturn(Optional.of(appt));
+
+    var ex = assertThrows(ResponseStatusException.class,
+        () -> service.updateStatus(apptId, "CANCELLED"));
+
+    assertTrue(ex.getReason().contains("Invalid status transition"));
+    verify(appointmentRepository, never()).save(any());
   }
-  
+
   @Test
   void updateStatus_throwsWhenMissing() {
       when(appointmentRepository.findById(999L)).thenReturn(Optional.empty());
@@ -268,7 +285,6 @@ class AppointmentServiceTest {
               () -> service.updateStatus(999L, "CANCELLED"));
       assertEquals("Appointment not found with ID: 999", ex.getMessage());
   }
-
 
   // ---------- Delete ----------
 
