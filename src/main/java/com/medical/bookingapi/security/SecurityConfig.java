@@ -53,15 +53,16 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
+
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/users/login", "/api/auth/**", "/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/admins/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/doctors/me").hasAnyRole("DOCTOR", "ADMIN")
-                // public/guest or authenticated browsing of doctors
                 .requestMatchers(HttpMethod.GET, "/api/doctors/**").permitAll()
-                // write actions (adjust to your policy)
                 .requestMatchers(HttpMethod.POST, "/api/doctors").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,  "/api/doctors/**").hasAnyRole("DOCTOR", "ADMIN")
                 .requestMatchers("/api/patients/**").authenticated()
@@ -71,6 +72,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,   "/api/appointmentSlots").hasAnyRole("DOCTOR","ADMIN")
                 .requestMatchers(HttpMethod.PUT,    "/api/appointmentSlots/**").hasAnyRole("DOCTOR","ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/appointmentSlots/**").hasAnyRole("DOCTOR","ADMIN")
+
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -81,9 +83,8 @@ public class SecurityConfig {
     @Bean
     CommandLineRunner adminPwdCheck(com.medical.bookingapi.repository.UserRepository repo,
                                     org.springframework.security.crypto.password.PasswordEncoder enc) {
-    return args -> repo.findByEmail("admin@example.com").ifPresent(u -> {
-        System.out.println("enc.matches(man1234) for admin = " + enc.matches("man1234", u.getPassword_hash()));
-    });
+        return args -> repo.findByEmail("admin@example.com").ifPresent(u -> {
+            System.out.println("enc.matches(man1234) for admin = " + enc.matches("man1234", u.getPassword_hash()));
+        });
     }
-
 }
