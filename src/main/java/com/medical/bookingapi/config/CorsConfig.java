@@ -14,14 +14,18 @@ import java.util.List;
 public class CorsConfig {
 
   @Bean
-  @Order(Ordered.HIGHEST_PRECEDENCE) // ensure it runs before Spring Security chain
+  @Order(Ordered.HIGHEST_PRECEDENCE) // run before Spring Security
   public CorsFilter corsFilter() {
     CorsConfiguration cfg = new CorsConfiguration();
-    // Safer: allow your Koyeb frontend subdomain(s) + local dev
+
+    // If your frontend subdomain changes, this keeps working:
     cfg.setAllowedOriginPatterns(List.of(
         "https://*.koyeb.app",
         "http://localhost:5173"
     ));
+    // Or lock it to the exact URL if you prefer:
+    // cfg.setAllowedOrigins(List.of("https://right-renelle-xenios-886dcd55.koyeb.app", "http://localhost:5173"));
+
     cfg.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
     cfg.setAllowedHeaders(List.of("*"));
     cfg.setExposedHeaders(List.of("Authorization","Content-Type"));
@@ -33,4 +37,3 @@ public class CorsConfig {
     return new CorsFilter(source);
   }
 }
- 
