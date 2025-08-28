@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
 
 @Configuration
@@ -52,11 +51,11 @@ public class SecurityConfig {
   SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider provider) throws Exception {
     return http
         .authenticationProvider(provider)
-        .cors(Customizer.withDefaults())                 // enable CORS
+        .cors(Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
             .requestMatchers("/api/users/login", "/api/auth/**", "/auth/**").permitAll()
@@ -80,22 +79,20 @@ public class SecurityConfig {
         .build();
   }
 
-  // *** Add this: global CORS rules ***
-  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
+  // Global CORS rules (added your deployed origin)
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration cfg = new CorsConfiguration();
-    cfg.setAllowedOrigins(List.of(
-        "https://right-renelle-xenios-886dcd55.koyeb.app", // your frontend
-        "http://localhost:5173"                             // local dev (Vite)
-    ));
+    cfg.setAllowedOrigins(List.of("https://medicalbooking.koyeb.app")); // frontend
     cfg.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
     cfg.setAllowedHeaders(List.of("Authorization","Content-Type","Accept","Origin","X-Requested-With"));
     cfg.setExposedHeaders(List.of("Authorization","Content-Type"));
     cfg.setAllowCredentials(true);
     cfg.setMaxAge(3600L);
+    UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
+    src.registerCorsConfiguration("/**", cfg);
+    return src;
+    }
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", cfg);
-    return source;
-  }
+
 }
