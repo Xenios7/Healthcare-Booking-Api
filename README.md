@@ -99,76 +99,11 @@ Export your diagram to `docs/architecture.png`.
 
 ### 📋 Entities & Tables (baseline)
 
-> Replace/extend with your exact fields as implemented.
-
-#### `users`
-| field         | type         | notes                          |
-|---------------|--------------|--------------------------------|
-| id            | UUID (PK)    |                                |
-| email         | varchar(255) | unique                         |
-| password_hash | varchar(255) |                                |
-| role          | enum         | `PATIENT` `DOCTOR` `ADMIN`     |
-| created_at    | timestamptz  | default now()                  |
-| updated_at    | timestamptz  |                                |
-
-#### `patients`
-| field        | type                   | notes             |
-|--------------|------------------------|-------------------|
-| id           | UUID (PK/FK→users.id)  | one-to-one user   |
-| first_name   | varchar(100)           |                   |
-| last_name    | varchar(100)           |                   |
-| dob          | date                   |                   |
-| phone        | varchar(30)            |                   |
-| insurance_no | varchar(100)           | nullable          |
-
-#### `doctors`
-| field          | type                   | notes                 |
-|----------------|------------------------|-----------------------|
-| id             | UUID (PK/FK→users.id)  | one-to-one user       |
-| specialization | varchar(120)           |                       |
-| bio            | text                   | nullable              |
-| clinic_id      | UUID (FK→clinics.id)   | nullable              |
-
-#### `clinics`
-| field   | type           | notes |
-|---------|----------------|-------|
-| id      | UUID (PK)      |       |
-| name    | varchar(150)   |       |
-| address | text           |       |
-| phone   | varchar(30)    |       |
-
-#### `availability_slots`
-| field        | type                   | notes                                 |
-|--------------|------------------------|---------------------------------------|
-| id           | UUID (PK)              |                                       |
-| doctor_id    | UUID (FK→doctors.id)   |                                       |
-| start_time   | timestamptz            |                                       |
-| end_time     | timestamptz            |                                       |
-| is_recurring | boolean                | default false                         |
-| rrule        | varchar(255)           | RFC 5545 rule if recurring (optional) |
-
-#### `appointments`
-| field      | type                     | notes                                        |
-|------------|--------------------------|----------------------------------------------|
-| id         | UUID (PK)                |                                              |
-| patient_id | UUID (FK→patients.id)    |                                              |
-| doctor_id  | UUID (FK→doctors.id)     |                                              |
-| start_time | timestamptz              |                                              |
-| end_time   | timestamptz              |                                              |
-| status     | enum                     | `PENDING` `CONFIRMED` `CANCELLED` `COMPLETED`|
-| notes      | text                     | nullable                                     |
-| created_at | timestamptz              | default now()                                |
-
-#### `notifications` (optional)
-| field   | type                  | notes                         |
-|---------|-----------------------|-------------------------------|
-| id      | UUID (PK)             |                               |
-| user_id | UUID (FK→users.id)    |                               |
-| channel | enum                  | `EMAIL` `SMS` `PUSH`          |
-| type    | varchar(50)           | e.g., `APPT_CONFIRMED`        |
-| payload | jsonb                 |                               |
-| status  | enum                  | `QUEUED` `SENT` `FAILED`      |
-| sent_at | timestamptz           | nullable                      |
+<p align="center">
+  <a href="ERD_BookingAPI.png">
+    <img src="EnitiyFields.png" alt="ERD – Booking API" height="490" />
+  </a>
+</p>
 
 ---
 
