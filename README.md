@@ -32,7 +32,6 @@ End-to-end medical appointments platform — patients book visits, doctors manag
 - Docker running (Testcontainers starts a `postgres:15-alpine` container)
 
 ### Run all tests
-```bash
 mvn test
 
 
