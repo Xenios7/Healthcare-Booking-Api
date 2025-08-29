@@ -90,7 +90,7 @@ Export your diagram to `docs/architecture.png`.
 ## 🧩 ERD
 <p align="center">
   <a href="ERD_BookingAPI.png">
-    <img src="ERD_BookingAPI.png" alt="ERD – Booking API" height="320" />
+    <img src="ERD_BookingAPI.png" alt="ERD – Booking API" height="490" />
   </a>
 </p>
 
