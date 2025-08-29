@@ -17,7 +17,7 @@ End-to-end medical appointments platform — patients book visits, doctors manag
 - **Cloud & Infra:** Koyeb (Web & API), Managed PostgreSQL, HTTPS/TLS
 - **Testing:** JUnit 5 (Spring Boot Test)
 
---
+---
 
 ## ✅ Testing
 
@@ -34,7 +34,16 @@ End-to-end medical appointments platform — patients book visits, doctors manag
 ### Run all tests
 mvn test
 
+---
 
+## 🐳 Containerization (Docker) & Cloud (Koyeb)
+
+The API is packaged as a Docker image and deployed on Koyeb as a managed container service. This ensures the **same artifact** runs in CI and production, with an HTTP health check (`/actuator/health`), environment-based configuration (DB URL, `JWT_SECRET`, etc.), and HTTPS termination provided by Koyeb. Docker Compose is available for **optional local development** (PostgreSQL + Adminer), but the project is **cloud-first**—build the image, deploy to Koyeb, run at scale.
+
+**Big picture**
+- **Build:** Multi-stage `Dockerfile` (Java 21, non-root) → Docker image
+- **Deploy:** Koyeb builds/pulls the image and runs it as `healthcare-booking-api`
+- **Runtime:** Health checks, logs, secrets, and scaling are managed by Koyeb
 
 ---
 
