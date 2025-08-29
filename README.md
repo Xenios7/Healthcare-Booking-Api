@@ -4,12 +4,38 @@ End-to-end medical appointments platform — patients book visits, doctors manag
 
 ---
 
-## 🧷 Repositories
+## 🧷 Frontend Repo
 
-- **API:** https://github.com/Xenios7/Healthcare-Booking-Api  
 - **Web:** https://github.com/Xenios7/Healthcare-Booking-Frontend  
 
-> Looking for implementation details? See each repo’s README. This hub is the product page.
+---
+
+## 🧰 Tech Stack
+- **Frontend:** JavaScript, React, Vite, HTML5/CSS3
+- **Backend:** Java, Spring Boot, PostgreSQL, Spring Security (JWT), JPA, Swagger, Maven
+- **Containerization:** Docker (Dockerfile)
+- **Cloud & Infra:** Koyeb (Web & API), Managed PostgreSQL, HTTPS/TLS
+- **Testing:** JUnit 5 (Spring Boot Test)
+
+--
+
+## ✅ Testing
+
+- **Frameworks:** JUnit 5, Spring Boot Test, RestAssured, Testcontainers (PostgreSQL), Hamcrest
+- **Style:** Full integration tests against a real PostgreSQL container (no in-memory DB)
+- **Main coverage:**
+  - End-to-end booking flow (patient books → doctor confirms → lists by doctor/patient)
+  - AuthN/AuthZ with JWT (401/403 paths + admin happy path)
+  - Repository seeding & FK cleanup per test
+
+### Requirements
+- Docker running (Testcontainers starts a `postgres:15-alpine` container)
+
+### Run all tests
+```bash
+mvn test
+
+
 
 ---
 
@@ -37,13 +63,6 @@ Everything runs in the cloud — **no local setup required**.
 
 ---
 
-## 🧰 Tech Stack
-
-- **Backend:** Spring Boot, PostgreSQL, JWT  
-- **Frontend:** React  
-- **Infra:** Koyeb (Web, API, DB)
-
----
 
 ## 🎥 Demo Video
 
