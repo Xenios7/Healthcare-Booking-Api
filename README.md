@@ -88,7 +88,9 @@ Export your diagram to `docs/architecture.png`.
 ## 🗄️ Database
 
 ## 🧩 ERD
-![ERD – Booking API](ERD_BookingAPI.png)
+<p align="center">
+  <img src="ERD_BookingAPI.png" alt="ERD – Booking API" width="800" />
+</p>
 
 ![ERD](docs/erd.png)
 
