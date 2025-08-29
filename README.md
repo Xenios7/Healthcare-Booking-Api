@@ -53,12 +53,19 @@ Everything runs in the cloud — **no local setup required**.
 
 ## ✨ Features
 
-- 📅 Appointment booking flow (create, confirm, cancel)
-- 👥 Role-based access (patient / doctor / admin)
-- 🗓️ Doctor availability & calendar view
-- 🔐 JWT authentication
-- 📜 OpenAPI/Swagger documentation
-- 🌐 Cloud deployment on Koyeb (web + API + DB)
+**Appointment lifecycle.** Create, confirm, cancel, and list appointments. Server-side validation prevents double-booking and enforces slot ownership and status transitions.
+
+**Availability management.** Doctors publish availability as discrete time slots; bookings atomically reserve a slot to ensure consistency under concurrency.
+
+**Authentication & authorization.** JWT-based authentication with role-based access control (Patient, Doctor, Admin). Passwords are stored as secure hashes via Spring Security.
+
+**RESTful API with documentation.** Consistent resource design and error handling. OpenAPI specification with Swagger UI for exploration and client generation.
+
+**Data model.** Normalized PostgreSQL schema with referential integrity (FKs) and timestamp auditing on key entities.
+
+**Security & configuration.** Environment-driven secrets (e.g., JWT secret), production CORS policy, and HTTPS termination at the edge (Koyeb).
+
+**Observability.** Health endpoint for liveness/readiness checks and basic operational monitoring.
 
 ---
 
@@ -113,7 +120,6 @@ Export your diagram to `docs/architecture.png`.
 </p>
 
 
-![ERD](docs/erd.png)
 
 ### 📋 Entities & Tables (baseline)
 
@@ -140,7 +146,6 @@ Export your diagram to `docs/architecture.png`.
 - **API:** `healthcare-booking-api` → https://medicalbooking-api.koyeb.app/  
 - **Database:** Postgres v17 → `ep-cold-scene-a2ffs6hj.eu-central-1.pg.koyeb.app`
 
-> 🔒 Make sure secrets (DB URL/creds, JWT secret, etc.) are stored in Koyeb and **not** committed.
 
 ---
 
