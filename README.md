@@ -81,44 +81,39 @@ Everything runs in the cloud — **no local setup required**.
 
 ## 📸 Preview
 
+<!-- Login (small) -->
 <p align="center">
   <img src="docs/screens/Login.png" alt="Login" width="360"><br/>
   <sub><b>Login</b></sub>
 </p>
 
-<!-- Dashboards -->
-<table>
-<tr>
-  <td align="center">
-    <img src="docs/screens/AdminDashboard.png" alt="Admin – Dashboard" height="900"><br/>
-    <sub><b>Admin – Dashboard</b></sub>
-  </td>
-  <td align="center">
-    <img src="docs/screens/DoctorDashboard.png" alt="Doctor – Dashboard" height="900"><br/>
-    <sub><b>Doctor – Dashboard</b></sub>
-  </td>
-</tr>
-<tr>
-  <td colspan="2" align="center">
-    <img src="docs/screens/PatientDashboard.png" alt="Patient – Dashboard" width="900"><br/>
-    <sub><b>Patient – Dashboard</b></sub>
-  </td>
-</tr>
-</table>
+<!-- Dashboards (stacked, larger) -->
+<p align="center">
+  <img src="docs/screens/AdminDashboard.png" alt="Admin – Dashboard" width="900"><br/>
+  <sub><b>Admin – Dashboard</b></sub>
+</p>
 
-<!-- Doctor time slots & appointments (last) -->
-<table>
-<tr>
-  <td align="center">
-    <img src="docs/screens/DoctorCreateTimeSlots.png" alt="Doctor – Create Time Slots" width="440"><br/>
-    <sub><b>Doctor – Create Time Slots</b></sub>
-  </td>
-  <td align="center">
-    <img src="docs/screens/DoctorAppointments.png" alt="Doctor – Appointments" width="440"><br/>
-    <sub><b>Doctor – Appointments</b></sub>
-  </td>
-</tr>
-</table>
+<p align="center">
+  <img src="docs/screens/DoctorDashboard.png" alt="Doctor – Dashboard" width="900"><br/>
+  <sub><b>Doctor – Dashboard</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/PatientDashboard.png" alt="Patient – Dashboard" width="900"><br/>
+  <sub><b>Patient – Dashboard</b></sub>
+</p>
+
+<!-- Doctor time slots & appointments (last, stacked) -->
+<p align="center">
+  <img src="docs/screens/DoctorCreateTimeSlots.png" alt="Doctor – Create Time Slots" width="800"><br/>
+  <sub><b>Doctor – Create Time Slots</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/DoctorAppointments.png" alt="Doctor – Appointments" width="800"><br/>
+  <sub><b>Doctor – Appointments</b></sub>
+</p>
+
 
 
 > 💡 Tip: Keep images ~1200px wide for crisp rendering. PNG for UI, SVG/PNG for diagrams.
