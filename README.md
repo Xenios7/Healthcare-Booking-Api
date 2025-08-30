@@ -79,6 +79,18 @@ Everything runs in the cloud — **no local setup required**.
 
 ---
 
+## 📸 Preview
+
+Put images in `docs/screens/` (use any filenames). A few examples:
+
+- `docs/screens/landing.png`  
+- `docs/screens/booking.png`  
+- `docs/screens/calendar.png`  
+- `docs/screens/admin.png`
+
+> 💡 Tip: Keep images ~1200px wide for crisp rendering. PNG for UI, SVG/PNG for diagrams.
+
+---
 
 ## 🎥 Demo Video
 
@@ -92,19 +104,6 @@ Place your video under `docs/` and it will appear here.
   Your browser does not support the video tag.
   <a href="docs/demo.mp4">Download the demo video</a>.
 </video>
-
----
-
-## 📸 Screenshots
-
-Put images in `docs/screens/` (use any filenames). A few examples:
-
-- `docs/screens/landing.png`  
-- `docs/screens/booking.png`  
-- `docs/screens/calendar.png`  
-- `docs/screens/admin.png`
-
-> 💡 Tip: Keep images ~1200px wide for crisp rendering. PNG for UI, SVG/PNG for diagrams.
 
 ---
 
