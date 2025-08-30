@@ -81,7 +81,6 @@ Everything runs in the cloud — **no local setup required**.
 
 ## 📸 Preview
 
-Put images in `docs/screens/` (use any filenames). A few examples:
 
 - `docs/screens/landing.png`  
 - `docs/screens/booking.png`  
