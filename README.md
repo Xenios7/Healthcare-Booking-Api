@@ -90,11 +90,11 @@ Everything runs in the cloud — **no local setup required**.
 <table>
 <tr>
   <td align="center">
-    <img src="docs/screens/AdminDashboard.png" alt="Admin – Dashboard" width="900"><br/>
+    <img src="docs/screens/AdminDashboard.png" alt="Admin – Dashboard" height="500"><br/>
     <sub><b>Admin – Dashboard</b></sub>
   </td>
   <td align="center">
-    <img src="docs/screens/DoctorDashboard.png" alt="Doctor – Dashboard" width="900"><br/>
+    <img src="docs/screens/DoctorDashboard.png" alt="Doctor – Dashboard" height="500"><br/>
     <sub><b>Doctor – Dashboard</b></sub>
   </td>
 </tr>
