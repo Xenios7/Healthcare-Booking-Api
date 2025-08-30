@@ -134,7 +134,7 @@ Export your diagram to `docs/architecture.png`.
 
 <p align="center">
   <a href="ERD_BookingAPI.png">
-    <img src="EnitiyFields.png" alt="ERD – Booking API" width="490" />
+    <img src="docs/screens/EnitiyFields.png" alt="ERD – Booking API" width="490" />
   </a>
 </p>
 
