@@ -103,6 +103,17 @@ Everything runs in the cloud — **no local setup required**.
   <sub><b>Patient – Dashboard</b></sub>
 </p>
 
+<!-- Patient flow (before doctor time slots) -->
+<p align="center">
+  <img src="docs/screens/PatientAppointments.png" alt="Patient – Appointments" width="800"><br/>
+  <sub><b>Patient – Appointments</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/PatientBookAppointment.png" alt="Patient – Book Appointment" width="800"><br/>
+  <sub><b>Patient – Book Appointment</b></sub>
+</p>
+
 <!-- Doctor time slots & appointments (last, stacked) -->
 <p align="center">
   <img src="docs/screens/DoctorCreateTimeSlots.png" alt="Doctor – Create Time Slots" width="800"><br/>
@@ -114,9 +125,6 @@ Everything runs in the cloud — **no local setup required**.
   <sub><b>Doctor – Appointments</b></sub>
 </p>
 
-
-
-> 💡 Tip: Keep images ~1200px wide for crisp rendering. PNG for UI, SVG/PNG for diagrams.
 
 ---
 
