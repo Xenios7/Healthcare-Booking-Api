@@ -81,13 +81,27 @@ Everything runs in the cloud — **no local setup required**.
 
 ## 📸 Preview
 
-- **Login.** 
-- `docs/screens/landing.png`
+## 📸 Preview
 
--  
-- `docs/screens/booking.png`  
-- `docs/screens/calendar.png`  
-- `docs/screens/admin.png`
+<p align="center">
+  <img src="docs/screens/Login.png" alt="Login" width="800">
+</p>
+
+<table>
+<tr>
+  <td><img src="docs/screens/DoctorCreateTimeSlots.png" alt="Doctor – Create Time Slots" width="390"></td>
+  <td><img src="docs/screens/DoctorAppointments.png" alt="Doctor – Appointments" width="390"></td>
+</tr>
+<tr>
+  <td><img src="docs/screens/DoctorDashboard.png" alt="Doctor – Dashboard" width="390"></td>
+  <td><img src="docs/screens/AdminDashboard.png" alt="Admin – Dashboard" width="390"></td>
+</tr>
+<tr>
+  <td colspan="2" align="center"><img src="docs/screens/PatientDashboard.png" alt="Patient – Dashboard" width="800"></td>
+</tr>
+</table>
+
+> Keep images ~1200px wide for crisp rendering. PNG for UI, SVG/PNG for diagrams.
 
 > 💡 Tip: Keep images ~1200px wide for crisp rendering. PNG for UI, SVG/PNG for diagrams.
 
