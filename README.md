@@ -81,8 +81,10 @@ Everything runs in the cloud — **no local setup required**.
 
 ## 📸 Preview
 
+- **Login.** 
+- `docs/screens/landing.png`
 
-- `docs/screens/landing.png`  
+-  
 - `docs/screens/booking.png`  
 - `docs/screens/calendar.png`  
 - `docs/screens/admin.png`
