@@ -79,7 +79,8 @@ Everything runs in the cloud — **no local setup required**.
 
 ---
 
-## 📸 Preview
+## 📸 Preview  
+<sub>💡 A full demo video is available later in this README.</sub>
 
 <!-- Login (small) -->
 <p align="center">
@@ -123,7 +124,58 @@ Everything runs in the cloud — **no local setup required**.
 <p align="center">
   <img src="docs/screens/DoctorAppointments.png" alt="Doctor – Appointments" width="800"><br/>
   <sub><b>Doctor – Appointments</b></sub>
+</p>## 📸 Preview  
+<sub>💡 A full demo video is available later in this README.</sub>
+
+<details>
+<summary>Click to expand screenshots</summary>
+
+<!-- Login (small) -->
+<p align="center">
+  <img src="docs/screens/Login.png" alt="Login" width="360"><br/>
+  <sub><b>Login</b></sub>
 </p>
+
+<!-- Dashboards -->
+<p align="center">
+  <img src="docs/screens/AdminDashboard.png" alt="Admin – Dashboard" width="900"><br/>
+  <sub><b>Admin – Dashboard</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/DoctorDashboard.png" alt="Doctor – Dashboard" width="900"><br/>
+  <sub><b>Doctor – Dashboard</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/PatientDashboard.png" alt="Patient – Dashboard" width="900"><br/>
+  <sub><b>Patient – Dashboard</b></sub>
+</p>
+
+<!-- Patient flow -->
+<p align="center">
+  <img src="docs/screens/PatientAppointments.png" alt="Patient – Appointments" width="800"><br/>
+  <sub><b>Patient – Appointments</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/PatientBookAppointment.png" alt="Patient – Book Appointment" width="800"><br/>
+  <sub><b>Patient – Book Appointment</b></sub>
+</p>
+
+<!-- Doctor flow -->
+<p align="center">
+  <img src="docs/screens/DoctorCreateTimeSlots.png" alt="Doctor – Create Time Slots" width="800"><br/>
+  <sub><b>Doctor – Create Time Slots</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/DoctorAppointments.png" alt="Doctor – Appointments" width="800"><br/>
+  <sub><b>Doctor – Appointments</b></sub>
+</p>
+
+</details>
+
 
 
 ---
