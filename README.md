@@ -78,7 +78,6 @@ Everything runs in the cloud — **no local setup required**.
    Health endpoint for liveness/readiness checks and basic operational monitoring.
 
 ---
-
 ## 📸 Preview <sub><sup>💡 A full demo video is available later in this README.</sup></sub>
 
 <!-- Login (small) -->
@@ -105,7 +104,7 @@ Everything runs in the cloud — **no local setup required**.
 
 <!-- Collapsible section starts here -->
 <details>
-<summary><b>Click to expand more screenshots</b></summary>
+<summary>📂 <b>Click to expand more screenshots</b></summary>
 
 <p align="center">
   <img src="docs/screens/PatientAppointments.png" alt="Patient – Appointments" width="800"><br/>
@@ -115,8 +114,19 @@ Everything runs in the cloud — **no local setup required**.
 <p align="center">
   <img src="docs/screens/PatientBookAppointment.png" alt="Patient – Book Appointment" width="800"><br/>
   <sub><b>Patient – Book Appointment</b></sub>
-</
+</p>
 
+<p align="center">
+  <img src="docs/screens/DoctorCreateTimeSlots.png" alt="Doctor – Create Time Slots" width="800"><br/>
+  <sub><b>Doctor – Create Time Slots</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/screens/DoctorAppointments.png" alt="Doctor – Appointments" width="800"><br/>
+  <sub><b>Doctor – Appointments</b></sub>
+</p>
+
+</details>
 
 ---
 
