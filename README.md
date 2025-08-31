@@ -87,7 +87,7 @@ Everything runs in the cloud — **no local setup required**.
   <sub><b>Login</b></sub>
 </p>
 
-<!-- Dashboards (stacked, larger) -->
+<!-- Dashboards -->
 <p align="center">
   <img src="docs/screens/AdminDashboard.png" alt="Admin – Dashboard" width="900"><br/>
   <sub><b>Admin – Dashboard</b></sub>
@@ -103,7 +103,10 @@ Everything runs in the cloud — **no local setup required**.
   <sub><b>Patient – Dashboard</b></sub>
 </p>
 
-<!-- Patient flow (before doctor time slots) -->
+<!-- Collapsible section starts here -->
+<details>
+<summary><b>Click to expand more screenshots</b></summary>
+
 <p align="center">
   <img src="docs/screens/PatientAppointments.png" alt="Patient – Appointments" width="800"><br/>
   <sub><b>Patient – Appointments</b></sub>
@@ -112,18 +115,7 @@ Everything runs in the cloud — **no local setup required**.
 <p align="center">
   <img src="docs/screens/PatientBookAppointment.png" alt="Patient – Book Appointment" width="800"><br/>
   <sub><b>Patient – Book Appointment</b></sub>
-</p>
-
-<!-- Doctor time slots & appointments (last, stacked) -->
-<p align="center">
-  <img src="docs/screens/DoctorCreateTimeSlots.png" alt="Doctor – Create Time Slots" width="800"><br/>
-  <sub><b>Doctor – Create Time Slots</b></sub>
-</p>
-
-<p align="center">
-  <img src="docs/screens/DoctorAppointments.png" alt="Doctor – Appointments" width="800"><br/>
-  <sub><b>Doctor – Appointments</b></sub>
-
+</
 
 
 ---
