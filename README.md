@@ -79,8 +79,7 @@ Everything runs in the cloud — **no local setup required**.
 
 ---
 
-## 📸 Preview  
-<sub>💡 A full demo video is available later in this README.</sub>
+## 📸 Preview <sub><sup>💡 A full demo video is available later in this README.</sup></sub>
 
 <!-- Login (small) -->
 <p align="center">
