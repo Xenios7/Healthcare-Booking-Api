@@ -146,7 +146,30 @@ Export your diagram to `docs/architecture.png`.
 **Auth:** JWT (role-based endpoints)  
 **Deploy:** Koyeb (Frankfurt, eu-central-1)
 
-![Architecture](docs/architecture.png)
+flowchart TB
+    %% Frontend
+    A[React Frontend\n(Web UI)]
+
+    %% Backend
+    B[Spring Boot API\n(Role-based Endpoints)]
+
+    %% Auth
+    D[JWT Authentication\n(Access & Refresh Tokens)]
+
+    %% Database
+    C[(PostgreSQL Database)]
+
+    %% Deployment
+    E[Koyeb Deployment\n(Frankfurt, eu-central-1)]
+
+    %% Connections
+    A -->|HTTP / JSON| B
+    A --> D
+    B --> D
+    B -->|SQL Queries| C
+    B --> E
+    C --> E
+
 
 ---
 
