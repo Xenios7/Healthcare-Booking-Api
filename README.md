@@ -133,6 +133,8 @@ Everything runs in the cloud — **no local setup required**.
 
 [View the full demo on YouTube](https://youtu.be/CqW8P-5wNE0)
 
+[![Watch the demo](https://img.youtube.com/vi/CqW8P-5wNE0/0.jpg)](https://youtu.be/CqW8P-5wNE0)
+
 ---
 
 
