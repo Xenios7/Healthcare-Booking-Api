@@ -140,35 +140,15 @@ Everything runs in the cloud — **no local setup required**.
 
 ## 🧠 Architecture
 
-Export your diagram to `docs/architecture.png`.
+<p align="center">
+  <img src="docs/screens/ArchitectureFullStack.png" alt="Architecture" width="900"><br/>
+  <sub><b>Architecture</b></sub>
+</p>
+
 
 **Flow:** Web (React) → API (Spring Boot) → PostgreSQL  
 **Auth:** JWT (role-based endpoints)  
 **Deploy:** Koyeb (Frankfurt, eu-central-1)
-
-flowchart TB
-    %% Frontend
-    A[React Frontend\n(Web UI)]
-
-    %% Backend
-    B[Spring Boot API\n(Role-based Endpoints)]
-
-    %% Auth
-    D[JWT Authentication\n(Access & Refresh Tokens)]
-
-    %% Database
-    C[(PostgreSQL Database)]
-
-    %% Deployment
-    E[Koyeb Deployment\n(Frankfurt, eu-central-1)]
-
-    %% Connections
-    A -->|HTTP / JSON| B
-    A --> D
-    B --> D
-    B -->|SQL Queries| C
-    B --> E
-    C --> E
 
 
 ---
