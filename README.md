@@ -132,16 +132,7 @@ Everything runs in the cloud — **no local setup required**.
 
 ## 🎥 Demo Video
 
-Place your video under `docs/` and it will appear here.
-
-- **High quality (download/preview):** `docs/demo.mov`  
-- **Best browser compatibility:** convert a copy to MP4 → `docs/demo.mp4`
-
-<!-- Inline player (works best with .mp4); GitHub may still render as a link -->
-<video src="docs/demo.mp4" controls width="720">
-  Your browser does not support the video tag.
-  <a href="docs/demo.mp4">Download the demo video</a>.
-</video>
+[![Watch the demo](https://img.youtube.com/vi/CqW8P-5wNE0/0.jpg)](https://youtu.be/CqW8P-5wNE0)
 
 ---
 
