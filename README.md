@@ -167,8 +167,8 @@ Everything runs in the cloud — **no local setup required**.
 ### 📋 Entities & Tables (baseline)
 
 <p align="center">
-  <a href="ERD_BookingAPI.png">
-    <img src="docs/screens/EnitiyFields.png" alt="ERD – Booking API" width="490" />
+  <a href="EnitiyFields.png.png">
+    <img src="docs/screens/EnitiyFields.png" alt="Entities & Tables" width="490" />
   </a>
 </p>
 
