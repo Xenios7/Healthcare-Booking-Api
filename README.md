@@ -32,7 +32,9 @@ End-to-end medical appointments platform — patients book visits, doctors manag
 - Docker running (Testcontainers starts a `postgres:15-alpine` container)
 
 ### Run all tests
+```
 mvn test
+```
 
 ---
 
@@ -191,23 +193,58 @@ Everything runs in the cloud — **no local setup required**.
 
 
 ---
+## 📂 Project Structure
 
-## 🗂️ Project Structure (Hub)
+This repository contains the **backend (Spring Boot API)** for the Medical Booking System.  
+The **frontend (React)** is in a separate repository → [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
 
-```
+---
+
+### 🖥 Backend (this repo)
+
 .
-├─ docs/
-│  ├─ architecture.png
-│  ├─ erd.png
-│  ├─ demo.mov        # optional (original)
-│  ├─ demo.mp4        # recommended for inline playback
-│  └─ screens/
-│     ├─ landing.png
-│     ├─ booking.png
-│     ├─ calendar.png
-│     └─ admin.png
+├─ docs/                         # Documentation & media
+│  ├─ architecture.png           # System architecture diagram
+│  ├─ erd.png                    # Database ERD
+│  ├─ demo.mp4                   # Optimized demo video
+│  └─ screens/                   # UI screenshots
+│
+├─ src/main/java/com/medical/bookingapi/
+│  ├─ auth/                      # JWT security, filters, auth service
+│  ├─ controller/                # REST controllers (API endpoints)
+│  ├─ dto/                       # Data Transfer Objects
+│  ├─ model/                     # JPA entities
+│  ├─ repository/                # Spring Data repositories
+│  ├─ service/                   # Business logic
+│  └─ BookingapiApplication.java # Main entry point
+│
+├─ src/main/resources/
+│  ├─ application.yml            # Spring Boot config
+│  └─ schema.sql / data.sql      # DB init scripts (if any)
+│
+├─ pom.xml                       # Maven build config
 └─ README.md
-```
+
+---
+
+### 🎨 Frontend (separate repo)
+
+📌 This structure belongs to the **React frontend**, available at [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
+
+.
+├─ public/                       # Static assets
+│  └─ index.html
+│
+├─ src/
+│  ├─ components/                # Reusable UI components
+│  ├─ pages/                     # Login, Dashboards, Booking pages
+│  ├─ services/                  # API calls to backend
+│  ├─ App.js                     # Root component
+│  └─ index.js                   # Entry point
+│
+├─ package.json
+└─ README.md
+
 
 ---
 
