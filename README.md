@@ -167,8 +167,8 @@ Everything runs in the cloud — **no local setup required**.
 ### 📋 Entities & Tables (baseline)
 
 <p align="center">
-  <a href="EnitiyFields.png.png">
-    <img src="docs/screens/EnitiyFields.png" alt="Entities & Tables" width="490" />
+  <a href="EntitiyFields.png">
+    <img src="docs/screens/EntitiyFields.png" alt="Entities & Tables" width="490" />
   </a>
 </p>
 
