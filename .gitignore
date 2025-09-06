@@ -1,10 +1,25 @@
 HELP.md
+
+# === Java / Maven ===
 target/
-.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+*.class
+*.jar
+*.war
+*.ear
 
-### STS ###
+# Maven wrapper (keep script, ignore jar as per Spring template)
+.mvn/wrapper/maven-wrapper.jar
+
+# Test reports / coverage
+target/surefire-reports/
+target/failsafe-reports/
+target/site/jacoco/
+jacoco.exec
+
+# === IDEs ===
+## STS
 .apt_generated
 .classpath
 .factorypath
@@ -13,13 +28,14 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
+## IntelliJ IDEA
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
 
-### NetBeans ###
+## NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,17 +45,37 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+## VS Code
 .vscode/
 
-# macOS
+# === OS junk ===
 .DS_Store
 **/.DS_Store
+Thumbs.db
 
-# macOS
-.DS_Store
-**/.DS_Store
+# === Logs / temp ===
+logs/
+*.log
+hs_err_pid*
+replay_pid*
+hsperfdata_*/
 
-# macOS
-.DS_Store
-**/.DS_Store
+# === Env & local config (never commit secrets) ===
+.env
+*.env
+*.env.*
+!.env.example
+application-local.yml
+application-*.local.yml
+
+# === Databases (local dev) ===
+*.h2.db
+*.mv.db
+*.sqlite
+*.db
+
+# === Misc ===
+*.swp
+*.swo
+*.bak
+*.tmp
