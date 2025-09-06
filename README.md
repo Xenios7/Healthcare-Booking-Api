@@ -276,4 +276,4 @@ The **frontend (React + Vite)** is in a separate repository → [booking-fronten
   The app is **cloud-first** and the frontend points to the **cloud API**. You can use the live demo without any local setup.
 
 - **Can I still run locally later?**  
-  Yes — if you add local envs and point the frontend to a local API; that’s outside the scope of this README since the current code targets the cloud API.
+  Yes if you add local envs and point the frontend to a local API; that’s outside the scope of this README since the current code targets the cloud API.
