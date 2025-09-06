@@ -252,6 +252,12 @@ The **frontend (React + Vite)** is in a separate repository → [booking-fronten
 └─ README.md
 ```
 
+## 🔧 Environment
+Copy and edit:
+```
+cp .env.example .env
+```
+
 ---
 
 ## 🔐 Security Notes
