@@ -168,7 +168,7 @@ Everything runs in the cloud — **no local setup required**.
 
 <p align="center">
   <a href="EntitiyFields.png">
-    <img src="docs/screens/EntitiyFields.png" alt="Entities & Tables" height="490" />
+    <img src="docs/screens/EntitiyFields.png" alt="Entities & Tables" width="650" />
   </a>
 </p>
 
