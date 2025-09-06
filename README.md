@@ -196,7 +196,7 @@ Everything runs in the cloud — **no local setup required**.
 ## 📂 Project Structure
 
 This repository contains the **backend (Spring Boot API)** for the Medical Booking System.  
-The **frontend (React + Vite)** is in a separate repository → [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
+The **frontend (React + Vite)** is in a separate repository → [booking-frontend repo](https://github.com/Xenios7/Healthcare-Booking-Frontend).
 
 ---
 
@@ -227,8 +227,7 @@ The **frontend (React + Vite)** is in a separate repository → [booking-fronten
 │  └─ application.yml            # Main app config
 │
 ├─ test/                         # Unit & integration tests
-│  └─ Test.java
-│
+│ 
 ├─ Dockerfile
 ├─ compose.yml                   # Docker Compose (API + DB)
 ├─ pom.xml                       # Maven build file
@@ -239,7 +238,7 @@ The **frontend (React + Vite)** is in a separate repository → [booking-fronten
 
 ### 🎨 Frontend (separate repo)
 
-📌 This structure belongs to the **React (Vite) frontend**, available at [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
+📌 This structure belongs to the **React (Vite) frontend**, available at [booking-frontend repo](https://github.com/Xenios7/Healthcare-Booking-Frontend).
 
 ```
 .
@@ -253,9 +252,7 @@ The **frontend (React + Vite)** is in a separate repository → [booking-fronten
 │  ├─ main.jsx                   # React entry point
 │  └─ styles.css                 # Global styles
 │
-├─ public/
-│  └─ index.html                 # HTML entry point
-│
+├─ index.html                    # HTML entry point
 ├─ .env / .env.example           # Env variables
 ├─ .env.production               # Production config
 ├─ package.json                  # Dependencies & scripts
