@@ -39,3 +39,19 @@ management:
 security:
   jwt:
     secret: ${JWT_SECRET}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    try-it-out-enabled: true
+  packages-to-scan: com.medical.bookingapi.controller
+  paths-to-match: /api/**
+
+logging:
+  level:
+    '[org.springdoc]': DEBUG
+    '[org.reflections]': ERROR
