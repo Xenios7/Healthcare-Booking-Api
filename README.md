@@ -158,6 +158,7 @@ Everything runs in the cloud — **no local setup required**.
 ---
 
 ## 🧩 ERD
+
 <p align="center">
   <a href="ERD_BookingAPI.png">
     <img src="docs/screens/ERD_BookingAPI.png" alt="ERD – Booking API" height="490" />
@@ -166,22 +167,13 @@ Everything runs in the cloud — **no local setup required**.
 
 
 
-### 📋 Entities & Tables (baseline)
+## 📋 Entities & Tables
 
 <p align="center">
   <a href="EntitiyFields.png">
     <img src="docs/screens/EntitiyFields.png" alt="Entities & Tables" width="650" />
   </a>
 </p>
-
----
-
-## 📚 API Docs
-
-- **Prod Swagger:** `https://medicalbooking-api.koyeb.app/swagger-ui`  
-- **OpenAPI JSON:** `https://medicalbooking-api.koyeb.app/v3/api-docs`
-
-> 🧪 Local Swagger links are omitted because this project is cloud-first and the frontend targets the cloud API.
 
 ---
 
