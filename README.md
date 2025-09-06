@@ -260,6 +260,11 @@ cp .env.example .env
 
 ---
 
+## License
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
+
 ## 🔐 Security Notes
 
 - Never commit secrets or `.env` files  
