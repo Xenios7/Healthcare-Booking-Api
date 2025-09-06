@@ -48,7 +48,7 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
     try-it-out-enabled: true
-  packages-to-scan: com.medical.bookingapi.controller
+  packages-to-scan: com.medical.bookingapi.controller.patients
   paths-to-match: /api/**
 
 logging:
