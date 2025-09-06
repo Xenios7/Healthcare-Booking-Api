@@ -6,7 +6,7 @@ End-to-end medical appointments platform — patients book visits, doctors manag
 
 ## 🧷 Frontend Repo
 
-- **Web:** https://github.com/Xenios7/Healthcare-Booking-Frontend  
+- https://github.com/Xenios7/Healthcare-Booking-Frontend  
 
 ---
 
