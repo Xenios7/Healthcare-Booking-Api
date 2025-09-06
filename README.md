@@ -193,59 +193,73 @@ Everything runs in the cloud — **no local setup required**.
 
 
 ---
-# 📂 Project Structure
+## 📂 Project Structure
 
 This repository contains the **backend (Spring Boot API)** for the Medical Booking System.  
-The **frontend (React)** is in a separate repository → [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
+The **frontend (React + Vite)** is in a separate repository → [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
 
 ---
 
-## 🖥 Backend (this repo)
+### 🖥 Backend (this repo)
 
 ```
 .
 ├─ docs/                         # Documentation & media
-│  ├─ architecture.png           # System architecture diagram
-│  ├─ erd.png                    # Database ERD
-│  ├─ demo.mp4                   # Optimized demo video
+│  ├─ architecture.png
+│  ├─ erd.png
 │  └─ screens/                   # UI screenshots
 │
 ├─ src/main/java/com/medical/bookingapi/
-│  ├─ auth/                      # JWT security, filters, auth service
-│  ├─ controller/                # REST controllers (API endpoints)
+│  ├─ auth/                      # Authentication & JWT handling
+│  ├─ config/                    # Configurations (CORS, beans, etc.)
+│  ├─ controller/                # REST API endpoints
 │  ├─ dto/                       # Data Transfer Objects
+│  ├─ exception/                 # Global exception handling
+│  ├─ mapper/                    # DTO ↔ Entity mapping
 │  ├─ model/                     # JPA entities
 │  ├─ repository/                # Spring Data repositories
+│  ├─ security/                  # Security configs & filters
 │  ├─ service/                   # Business logic
 │  └─ BookingapiApplication.java # Main entry point
 │
 ├─ src/main/resources/
-│  ├─ application.yml            # Spring Boot config
-│  └─ schema.sql / data.sql      # DB init scripts (if any)
+│  ├─ META-INF/
+│  └─ application.yml            # Main app config
 │
-├─ pom.xml                       # Maven build config
+├─ test/                         # Unit & integration tests
+│  └─ Test.java
+│
+├─ Dockerfile
+├─ compose.yml                   # Docker Compose (API + DB)
+├─ pom.xml                       # Maven build file
 └─ README.md
 ```
 
 ---
 
-## 🎨 Frontend (separate repo)
+### 🎨 Frontend (separate repo)
 
-📌 This structure belongs to the **React frontend**, available at [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
+📌 This structure belongs to the **React (Vite) frontend**, available at [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
 
 ```
 .
-├─ public/                       # Static assets
-│  └─ index.html
-│
 ├─ src/
-│  ├─ components/                # Reusable UI components
-│  ├─ pages/                     # Login, Dashboards, Booking pages
-│  ├─ services/                  # API calls to backend
-│  ├─ App.js                     # Root component
-│  └─ index.js                   # Entry point
+│  ├─ auth/                      # Auth-related components/hooks
+│  ├─ components/                # Shared/reusable UI components
+│  ├─ hooks/                     # Custom React hooks
+│  ├─ pages/                     # Page-level views (Login, Dashboard, Booking)
+│  ├─ services/                  # API integration (e.g. axios/fetch)
+│  ├─ App.jsx                    # Root app component
+│  ├─ main.jsx                   # React entry point
+│  └─ styles.css                 # Global styles
 │
-├─ package.json
+├─ public/
+│  └─ index.html                 # HTML entry point
+│
+├─ .env / .env.example           # Env variables
+├─ .env.production               # Production config
+├─ package.json                  # Dependencies & scripts
+├─ vite.config.js                # Vite config
 └─ README.md
 ```
 
