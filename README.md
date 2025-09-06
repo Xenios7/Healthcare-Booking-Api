@@ -193,15 +193,16 @@ Everything runs in the cloud — **no local setup required**.
 
 
 ---
-## 📂 Project Structure
+# 📂 Project Structure
 
 This repository contains the **backend (Spring Boot API)** for the Medical Booking System.  
 The **frontend (React)** is in a separate repository → [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
 
 ---
 
-### 🖥 Backend (this repo)
+## 🖥 Backend (this repo)
 
+```
 .
 ├─ docs/                         # Documentation & media
 │  ├─ architecture.png           # System architecture diagram
@@ -224,13 +225,15 @@ The **frontend (React)** is in a separate repository → [booking-frontend repo]
 │
 ├─ pom.xml                       # Maven build config
 └─ README.md
+```
 
 ---
 
-### 🎨 Frontend (separate repo)
+## 🎨 Frontend (separate repo)
 
 📌 This structure belongs to the **React frontend**, available at [booking-frontend repo](https://github.com/YourUsername/booking-frontend).
 
+```
 .
 ├─ public/                       # Static assets
 │  └─ index.html
@@ -244,7 +247,7 @@ The **frontend (React)** is in a separate repository → [booking-frontend repo]
 │
 ├─ package.json
 └─ README.md
-
+```
 
 ---
 
