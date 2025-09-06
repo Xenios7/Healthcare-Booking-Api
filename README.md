@@ -78,6 +78,7 @@ Everything runs in the cloud — **no local setup required**.
    Health endpoint for liveness/readiness checks and basic operational monitoring.
 
 ---
+
 ## 📸 Preview <sub><sup>💡 A full demo video is available later in this README.</sup></sub>
 
 <!-- Login (small) -->
@@ -127,6 +128,7 @@ Everything runs in the cloud — **no local setup required**.
 </p>
 
 </details>
+
 ---
 
 ## 🎥 Demo Video
@@ -152,8 +154,6 @@ Everything runs in the cloud — **no local setup required**.
 
 
 ---
-
-## 🗄️ Database
 
 ## 🧩 ERD
 <p align="center">
